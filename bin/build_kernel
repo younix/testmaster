@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd /usr/src/sys/arch/$(machine)/conf
+config GENERIC.MP
+cd ../compile/GENERIC.MP
+make -j 3
+doas make install
