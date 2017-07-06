@@ -6,9 +6,9 @@ PATH="/home/test/bin:$PATH"
 tftpserver=10.0.1.4
 setserver=10.0.1.5
 siteserver=10.0.1.4
-echo "start installation of the current snapshot on machine $machine"
+echo "start upgrade of the current snapshot on machine $machine"
 
-mk_install_conf() {
+mk_upgrade_conf() {
 	rm -f ${1}
 
 	cat > ${1} <<- EOF
@@ -29,14 +29,15 @@ mk_install_conf() {
 		Server directory = pub/OpenBSD/snapshots/i386
 		Use http instead = yes
 		Set name(s) = done
-		Location of sets = http
-		Server = ${siteserver}
-		Server directory = site
-		Use http instead = yes
-		INSTALL.i386 not found. Use sets found here anyway = yes
-		Set name(s) = done
-		Continue without verification = yes
 	EOF
+#		Location of sets = http
+#		Server = ${siteserver}
+#		Server directory = site
+#		Use http instead = yes
+#		INSTALL.i386 not found. Use sets found here anyway = yes
+#		Set name(s) = done
+#		Continue without verification = yes
+
 #		Which network interface do you wish to configure = ${interface}
 #		Checksum test for site${version}.tgz failed. Continue anyway = yes
 #		Unverified sets: site${version}.tgz. Continue without verification = yes
@@ -48,16 +49,14 @@ set_dhcpd_conf() {
 		action="host $machine { 		\
 			hardware ethernet $hwaddr;	\
 			fixed-address $ipaddr;		\
+			filename \"auto_upgrade\";	\
 			next-server $tftpserver;	\
-			filename \"auto_install\";	\
 		} #$machine"
 		;;
 		*)
 		action="host $machine { 		\
 			hardware ethernet $hwaddr;	\
 			fixed-address $ipaddr;		\
-			next-server $tftpserver;	\
-			filename \"invalid\";		\
 		} #$machine"
 		;;
 	esac
@@ -82,8 +81,8 @@ ftp -o /var/spool/tftp/bsd.rd  http://[2001:a60:91df:c000::16]/pub/OpenBSD/snaps
 ftp -o /var/spool/tftp/pxeboot http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/i386/pxeboot
 
 cp /var/spool/tftp/bsd.rd /var/spool/tftp/bsd
-cp /var/spool/tftp/pxeboot /var/spool/tftp/auto_install
-mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
+cp /var/spool/tftp/pxeboot /var/spool/tftp/auto_upgrade
+mk_upgrade_conf /var/www/htdocs/${hwaddr}-upgrade.conf
 
 # generate random.seed file
 #mkdir -p /var/spool/tftp/etc
