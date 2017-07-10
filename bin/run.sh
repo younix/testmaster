@@ -9,13 +9,30 @@ case "$action" in
 		exec /usr/local/bin/console "$USER"
 		;;
 	"on"|"off"|"cycle")
-		exec $setenv power.sh $action
+		if $setenv checklock.sh; then
+			exec $setenv power.sh $action
+		fi
 		;;
 	"setup")
-		exec $setenv setup.sh
+		if $setenv checklock.sh; then
+			exec $setenv setup.sh
+		fi
 		;;
 	"upgrade")
-		exec $setenv upgrade.sh
+		if $setenv checklock.sh; then
+			exec $setenv upgrade.sh
+		fi
+		;;
+	"env")
+		if $setenv checklock.sh; then
+			exec $setenv env
+		fi
+		;;
+	"lock")
+		exec $setenv lock.sh
+		;;
+	"free")
+		exec $setenv free.sh
 		;;
 	"help")
 		echo "       - console"
@@ -29,3 +46,5 @@ case "$action" in
 	*)
 		echo "unknown command";;
 esac
+
+exit 1
