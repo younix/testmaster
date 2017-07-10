@@ -41,6 +41,8 @@ case "$action" in
 		echo "cycle  - power cycle"
 		echo "setup  - install current snapshot"
 		echo "update - update to current snapshot"
+		echo "lock   - lock access to machine"
+		echo "free   - free access to machine"
 		echo "help   - print this message"
 		;;
 	*)
