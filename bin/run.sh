@@ -35,15 +35,15 @@ case "$action" in
 		exec $setenv free.sh
 		;;
 	"help")
-		echo "       - console"
-		echo "on     - power on"
-		echo "off    - power off"
-		echo "cycle  - power cycle"
-		echo "setup  - install current snapshot"
-		echo "update - update to current snapshot"
-		echo "lock   - lock access to machine"
-		echo "free   - free access to machine"
-		echo "help   - print this message"
+		echo "        - console"
+		echo "on      - power on"
+		echo "off     - power off"
+		echo "cycle   - power cycle"
+		echo "install - install current snapshot"
+		echo "upgrade - upgrade to current snapshot"
+		echo "lock    - lock access to machine"
+		echo "free    - free access to machine"
+		echo "help    - print this message"
 		;;
 	*)
 		echo "unknown command";;
