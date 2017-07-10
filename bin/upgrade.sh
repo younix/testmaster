@@ -3,9 +3,7 @@
 set -eux
 
 PATH="/home/test/bin:$PATH"
-tftpserver=10.0.1.4
-setserver=10.0.1.5
-siteserver=10.0.1.4
+
 echo "start upgrade of the current snapshot on machine $machine"
 
 mk_upgrade_conf() {

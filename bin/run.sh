@@ -13,9 +13,9 @@ case "$action" in
 			exec $setenv power.sh $action
 		fi
 		;;
-	"setup")
+	"setup"|"install")
 		if $setenv checklock.sh; then
-			exec $setenv setup.sh
+			exec $setenv install.sh
 		fi
 		;;
 	"upgrade")
