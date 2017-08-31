@@ -24,7 +24,7 @@ mk_upgrade_conf() {
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
 		Server = ${setserver}
-		Server directory = pub/OpenBSD/snapshots/i386
+		Server directory = pub/OpenBSD/snapshots/${arch}
 		Use http instead = yes
 		Set name(s) = done
 	EOF
@@ -75,8 +75,8 @@ trap on_exit EXIT
 
 # get current bsd.rd and pxeboot file
 rm -f /var/spool/tftp/bsd
-ftp -o /var/spool/tftp/bsd.rd  http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/i386/bsd.rd
-ftp -o /var/spool/tftp/pxeboot http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/i386/pxeboot
+ftp -o /var/spool/tftp/bsd.rd  http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+ftp -o /var/spool/tftp/pxeboot http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
 cp /var/spool/tftp/bsd.rd /var/spool/tftp/bsd
 cp /var/spool/tftp/pxeboot /var/spool/tftp/auto_upgrade
