@@ -44,11 +44,11 @@ mk_upgrade_conf() {
 set_dhcpd_conf() {
 	case "$1" in
 		"on")
-		action="host $machine { 		\
-			hardware ethernet $hwaddr;	\
-			fixed-address $ipaddr;		\
-			filename \"auto_upgrade\";	\
-			next-server $tftpserver;	\
+		action="host $machine { 			\
+			hardware ethernet $hwaddr;		\
+			fixed-address $ipaddr;			\
+			next-server $tftpserver;		\
+			filename \"$machine/auto_upgrade\";	\
 		} #$machine"
 		;;
 		*)
@@ -60,7 +60,7 @@ set_dhcpd_conf() {
 	esac
 
 	temp_file=`mktemp`
-	sed -e "s/^.*#$machine$/$action/" /etc/dhcpd.conf > $temp_file
+	sed -e "s,^.*#$machine$,$action," /etc/dhcpd.conf > $temp_file
 	cat $temp_file > /etc/dhcpd.conf
 	rm -f $temp_file
 
@@ -73,14 +73,18 @@ on_exit() {
 
 trap on_exit EXIT
 
-# get current bsd.rd and pxeboot file
-rm -f /var/spool/tftp/bsd
-ftp -o /var/spool/tftp/bsd.rd  http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
-ftp -o /var/spool/tftp/pxeboot http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
+tftp_dir="/var/spool/tftp/${machine}"
 
-cp /var/spool/tftp/bsd.rd /var/spool/tftp/bsd
-cp /var/spool/tftp/pxeboot /var/spool/tftp/auto_upgrade
-mk_upgrade_conf /var/www/htdocs/${hwaddr}-upgrade.conf
+rm -rf ${tftp_dir}
+mkdir -p ${tftp_dir}
+
+# get current bsd.rd and pxeboot file
+ftp -o /var/spool/tftp/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+ftp -o ${tftp_dir}/auto_upgrade http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
+
+rm -rf /var/www/htdocs/${machine}
+mkdir -p /var/www/htdocs/${machine}
+mk_upgrade_conf /var/www/htdocs/${machine}/upgrade.conf
 
 # generate random.seed file
 #mkdir -p /var/spool/tftp/etc
