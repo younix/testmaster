@@ -80,7 +80,9 @@ rm -rf ${tftp_dir}
 mkdir -p ${tftp_dir}
 
 # get current bsd.rd and pxeboot file
-ftp -o /var/spool/tftp/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+rm -f /var/spool/tftp/bsd.new
+ftp -o /var/spool/tftp/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+mv /var/spool/tftp/bsd.new /var/spool/tftp/bsd
 ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
 mkdir -p /var/www/htdocs/${machine}
