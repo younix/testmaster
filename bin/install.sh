@@ -89,8 +89,11 @@ mkdir -p /var/www/htdocs/${machine}
 mk_install_conf /var/www/htdocs/${machine}/install.conf
 
 # generate random.seed file
-#mkdir -p /var/spool/tftp/etc
-#dd if=/dev/random of="/var/spool/tftp/etc/random.seed" bs=512 count=1 2>/dev/null
+mkdir -p /var/spool/tftp/etc -m 775
+tmprand=`mktemp -p /var/spool/tftp/etc random.seed.XXXXXXXXXX`
+dd if=/dev/random of=$tmprand bs=512 count=1 status=none
+chmod 644 $tmprand
+mv $tmprand /var/spool/tftp/etc/random.seed
 
 # set serial configuration for boot loader
 cat - > /var/spool/tftp/etc/boot.conf <<-EOF
