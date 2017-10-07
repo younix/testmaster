@@ -42,6 +42,12 @@ case "$action" in
 	"free")
 		exec $setenv free.sh
 		;;
+	"scp -t .")
+		exec scp -t /var/spool/tftp/$USER
+		;;
+	"scp -r -t .")
+		exec scp -r -t /var/spool/tftp/$USER
+		;;
 	"help")
 		echo "        - console"
 		if test -f /home/$USER/env/powerdevice; then
