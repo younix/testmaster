@@ -84,11 +84,11 @@ ftp -o ${tftp_dir}/auto_upgrade http://[2001:a60:91df:c000::16]/pub/OpenBSD/snap
 
 rm -rf /var/www/htdocs/${machine}
 mkdir -p /var/www/htdocs/${machine}
-mk_upgrade_conf /var/www/htdocs/${machine}/upgrade.conf
+mk_upgrade_conf /var/www/htdocs/${hwaddr}-upgrade.conf
 
 # generate random.seed file
-#mkdir -p /var/spool/tftp/etc
-#dd if=/dev/random of="/var/spool/tftp/etc/random.seed" bs=512 count=1 2>/dev/null
+mkdir -p ${tftp_dir}/etc
+dd if=/dev/random of="${tftp_dir}/etc/random.seed" bs=512 count=1 2>/dev/null
 
 # set serial configuration for boot loader
 cat - > ${tftp_dir}/etc/boot.conf <<-EOF
