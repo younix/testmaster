@@ -43,11 +43,11 @@ mk_install_conf() {
 set_dhcpd_conf() {
 	case "$1" in
 		"on")
-		action="host $machine { 			\
-			hardware ethernet $hwaddr;		\
-			fixed-address $ipaddr;			\
-			next-server $tftpserver;		\
-			filename \"${machine}/auto_install\";	\
+		action="host $machine { 		\
+			hardware ethernet $hwaddr;	\
+			fixed-address $ipaddr;		\
+			next-server $tftpserver;	\
+			filename \"auto_install\";	\
 		} #$machine"
 		;;
 		*)
@@ -80,23 +80,23 @@ rm -rf ${tftp_dir}
 mkdir -p ${tftp_dir}
 
 # get current bsd.rd and pxeboot file
-rm -f /var/spool/tftp/bsd.new
-ftp -o /var/spool/tftp/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
-mv /var/spool/tftp/bsd.new /var/spool/tftp/bsd
+rm -f ${tftp_dir}/bsd.new
+ftp -o ${tftp_dir}/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+mv ${tftp_dir}/bsd.new ${tftp_dir}/bsd
 ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
 mkdir -p /var/www/htdocs/${machine}
-mk_install_conf /var/www/htdocs/${machine}/install.conf
+mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
 
 # generate random.seed file
-mkdir -p /var/spool/tftp/etc -m 775
-tmprand=`mktemp -p /var/spool/tftp/etc random.seed.XXXXXXXXXX`
+mkdir -p ${tftp_dir}/etc -m 775
+tmprand=`mktemp -p ${tftp_dir}/etc random.seed.XXXXXXXXXX`
 dd if=/dev/random of=$tmprand bs=512 count=1 status=none
 chmod 644 $tmprand
-mv $tmprand /var/spool/tftp/etc/random.seed
+mv $tmprand ${tftp_dir}/etc/random.seed
 
 # set serial configuration for boot loader
-cat - > /var/spool/tftp/etc/boot.conf <<-EOF
+cat - > ${tftp_dir}/etc/boot.conf <<-EOF
 	stty com0 115200
 	set tty com0
 EOF

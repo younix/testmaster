@@ -44,11 +44,11 @@ mk_upgrade_conf() {
 set_dhcpd_conf() {
 	case "$1" in
 		"on")
-		action="host $machine { 			\
-			hardware ethernet $hwaddr;		\
-			fixed-address $ipaddr;			\
-			next-server $tftpserver;		\
-			filename \"$machine/auto_upgrade\";	\
+		action="host $machine { 		\
+			hardware ethernet $hwaddr;	\
+			fixed-address $ipaddr;		\
+			next-server $tftpserver;	\
+			filename \"auto_upgrade\";	\
 		} #$machine"
 		;;
 		*)
@@ -79,7 +79,7 @@ rm -rf ${tftp_dir}
 mkdir -p ${tftp_dir}
 
 # get current bsd.rd and pxeboot file
-ftp -o /var/spool/tftp/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
 ftp -o ${tftp_dir}/auto_upgrade http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
 rm -rf /var/www/htdocs/${machine}
@@ -91,7 +91,7 @@ mk_upgrade_conf /var/www/htdocs/${machine}/upgrade.conf
 #dd if=/dev/random of="/var/spool/tftp/etc/random.seed" bs=512 count=1 2>/dev/null
 
 # set serial configuration for boot loader
-cat - > /var/spool/tftp/etc/boot.conf <<-EOF
+cat - > ${tftp_dir}/etc/boot.conf <<-EOF
 	stty com0 115200
 	set tty com0
 EOF
