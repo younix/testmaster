@@ -1,7 +1,0 @@
-#!/usr/local/bin/expect -f
-
-set timeout -1
-
-spawn tail -n 0 -f /var/www/logs/access_log
-expect "$env(ipaddr)*GET /$env(hwaddr)-install.conf*"
-exit 0

@@ -98,7 +98,6 @@ EOF
 
 set_dhcpd_conf on	> /dev/null
 ssh root@${ipaddr} shutdown -r now || power.sh cycle
-# tftpd.expect
 finish.expect
 set_dhcpd_conf off	> /dev/null
 login.expect
