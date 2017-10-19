@@ -19,6 +19,11 @@ case "$action" in
 			exec $setenv power.sh $action
 		fi
 		;;
+	"reboot")
+		if $setenv checklock.sh; then
+			exec $setenv reboot.sh
+		fi
+		;;
 	"setup"|"install")
 		if ! test -f /home/$USER/env/install; then no_command; fi
 		if $setenv checklock.sh; then
