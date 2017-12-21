@@ -55,6 +55,8 @@ set_dhcpd_conf() {
 		action="host $machine { 		\
 			hardware ethernet $hwaddr;	\
 			fixed-address $ipaddr;		\
+			next-server $tftpserver;	\
+			filename \"invalid\";		\
 		} #$machine"
 		;;
 	esac
