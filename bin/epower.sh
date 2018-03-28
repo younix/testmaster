@@ -7,20 +7,23 @@ usage() {
 	exit 1
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
 	usage
 fi
 
 port=$1
 action=$2
 
-case "$status" in
+case "$action" in
 "0")
-	echo "power off, machine $machine, dev $dev port $port"
+	echo "power off, machine $machine, dev epower port $port"
 	;;
 "1")
-	echo "power on, machine $machine, dev $dev port $port"
+	echo "power on, machine $machine, dev epower port $port"
+	;;
+*)
+	usage
 	;;
 esac
 
-echo "p${port}=${status}" > /dev/tty01
+echo "p${port}=${action}" > /dev/cuac10
