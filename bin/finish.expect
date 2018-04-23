@@ -1,6 +1,6 @@
 #!/usr/local/bin/expect -f
 
-set timeout -1
+set timeout 3500
 
 spawn tail -n 0 -f "/var/consoles/$env(machine)"
 expect -re "CONGRATULATIONS! Your OpenBSD ....... has been successfully completed!"
