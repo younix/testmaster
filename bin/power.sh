@@ -15,15 +15,15 @@ action=$1
 
 case "$action" in
 "on")
-	/home/test/bin/${powerdevice}.sh ${powerport} 1
+	/home/test/bin/${powerdevice}.sh "${powerport}" 1
 	;;
 "off")
-	/home/test/bin/${powerdevice}.sh ${powerport} 0
+	/home/test/bin/${powerdevice}.sh "${powerport}" 0
 	;;
 "cycle")
-	/home/test/bin/${powerdevice}.sh ${powerport} 0
-	sleep 5
-	/home/test/bin/${powerdevice}.sh ${powerport} 1
+	/home/test/bin/${powerdevice}.sh "${powerport}" 0
+	sleep 15
+	/home/test/bin/${powerdevice}.sh "${powerport}" 1
 	;;
 *)
 	usage
