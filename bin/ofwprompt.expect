@@ -1,0 +1,8 @@
+#!/usr/local/bin/expect -f
+
+set timeout 3500
+
+spawn tail -n 0 -f "/var/consoles/$env(machine)"
+expect -re "ok "
+
+exit 0
