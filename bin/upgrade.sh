@@ -84,6 +84,11 @@ mkdir -p ${tftp_dir}
 ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
 ftp -o ${tftp_dir}/auto_upgrade http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
+# XXX: quick fix for broken pxeboot loader AND raid controler
+if [ ${machine} = "ot12" -o ${machine} = "ot13" ]; then
+	cp /home/bluhm/pxeboot-nodisk ${tftp_dir}/auto_upgrade
+fi
+
 rm -rf /var/www/htdocs/${machine}
 mkdir -p /var/www/htdocs/${machine}
 mk_upgrade_conf /var/www/htdocs/${hwaddr}-upgrade.conf

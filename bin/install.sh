@@ -161,6 +161,11 @@ else
 	mv ${tftp_dir}/bsd.new ${tftp_dir}/bsd
 	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
 
+	# XXX: quick fix for broken pxeboot loader AND raid controler
+	if [ ${machine} = "ot12" -o ${machine} = "ot13" ]; then
+		cp /home/bluhm/pxeboot-nodisk ${tftp_dir}/auto_install
+	fi
+
 	mkdir -p /var/www/htdocs/${machine}
 	mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
 
