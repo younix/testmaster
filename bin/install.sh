@@ -2,9 +2,27 @@
 
 set -eux
 
+usage() {
+	echo "install [release]" > /dev/stderr
+	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
+	exit 1
+}
+
+release=snapshots
+if [ $# -eq 1 ]; then
+        release="$1"
+	if echo "$release" | ! grep -q '[0-9]\.[0-9]'; then
+		usage
+	fi
+	shift
+fi
+if [ $# -ne 0 ]; then
+        usage
+fi
+
 PATH="/home/test/bin:$PATH"
 
-echo "start installation of the current snapshot on machine $machine"
+echo "start installation of snapshot or release on machine $machine"
 
 mk_install_conf() {
 	rm -f ${1}
@@ -24,7 +42,7 @@ mk_install_conf() {
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
 		Server = ${setserver}
-		Server directory = pub/OpenBSD/snapshots/${arch}
+		Server directory = pub/OpenBSD/${release}/${arch}
 		Use http instead = yes
 		Set name(s) = done
 		Location of sets = http
@@ -61,7 +79,7 @@ fi)
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
 		Server = ${setserver}
-		Server directory = pub/OpenBSD/snapshots/${arch}
+		Server directory = pub/OpenBSD/${release}/${arch}
 		Use http instead = yes
 		Set name(s) = done
 		Location of sets = http
@@ -126,8 +144,8 @@ if [ "$arch" = "armv7" ]; then
 	mkdir -p /var/www/htdocs/${machine}
 	mk_install_conf_arm /var/www/htdocs/${hwaddr}-install.conf
 
-	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
-	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/BOOTARM.EFI
+	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
+	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/BOOTARM.EFI
 
 elif [ "$arch" = "arm64" ]; then
 
@@ -136,8 +154,8 @@ elif [ "$arch" = "arm64" ]; then
 	mkdir -p /var/www/htdocs/${machine}
 	mk_install_conf_arm /var/www/htdocs/${hwaddr}-install.conf
 
-	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
-	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/BOOTAA64.EFI
+	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
+	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/BOOTAA64.EFI
 
 elif [ "$arch" = "sparc64" ]; then
 
@@ -146,8 +164,8 @@ elif [ "$arch" = "sparc64" ]; then
 	mkdir -p /var/www/htdocs/${machine}
 	mk_install_conf_arm /var/www/htdocs/${hwaddr}-install.conf
 
-	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
-	ftp -o ${tftp_dir}/ofwboot.net http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/ofwboot.net
+	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
+	ftp -o ${tftp_dir}/ofwboot.net http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/ofwboot.net
 
 else
 	#
@@ -159,9 +177,9 @@ else
 
 	# get current bsd.rd and pxeboot file
 	rm -f ${tftp_dir}/bsd.new
-	ftp -o ${tftp_dir}/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/bsd.rd
+	ftp -o ${tftp_dir}/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
 	mv ${tftp_dir}/bsd.new ${tftp_dir}/bsd
-	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/snapshots/${arch}/pxeboot
+	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/pxeboot
 
 	# XXX: quick fix for broken pxeboot loader AND raid controler
 	if [ ${machine} = "ot12" -o ${machine} = "ot13" ]; then

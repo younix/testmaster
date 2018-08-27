@@ -1,6 +1,5 @@
 #!/bin/sh
 
-action="$SSH_ORIGINAL_COMMAND"
 setenv="/usr/local/bin/envdir /home/$USER/env"
 PATH="/home/test/bin:$PATH"
 
@@ -8,6 +7,10 @@ function no_command {
 	echo "command is not configured for $USER"
 	exit 1
 }
+
+command="$SSH_ORIGINAL_COMMAND"
+set -- $command
+action="$1"
 
 case "$action" in
 	""|"console")
@@ -27,7 +30,8 @@ case "$action" in
 	"setup"|"install")
 		if ! test -f /home/$USER/env/install; then no_command; fi
 		if $setenv checklock.sh; then
-			exec $setenv install.sh
+			shift
+			exec $setenv install.sh $*
 		fi
 		;;
 	"upgrade")
@@ -47,11 +51,15 @@ case "$action" in
 	"free")
 		exec $setenv free.sh
 		;;
-	"scp -t .")
-		exec scp -t /var/spool/tftp/$USER
-		;;
-	"scp -r -t .")
-		exec scp -r -t /var/spool/tftp/$USER
+	"scp")
+		case "$command" in
+		"scp -t .")
+			exec scp -t /var/spool/tftp/$USER
+			;;
+		"scp -r -t .")
+			exec scp -r -t /var/spool/tftp/$USER
+			;;
+		esac
 		;;
 	"help")
 		echo "        - console"
