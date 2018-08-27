@@ -76,6 +76,8 @@ fi)
 
 set_dhcpd_conf() {
 
+	set -eux
+
 	file="auto_install";
 
 	if [ "$arch" = "armv7" ]; then
