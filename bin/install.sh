@@ -11,7 +11,7 @@ usage() {
 release=snapshots
 if [ $# -eq 1 ]; then
         release="$1"
-	if echo "$release" | ! grep -q '[0-9]\.[0-9]'; then
+	if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
 		usage
 	fi
 	shift
