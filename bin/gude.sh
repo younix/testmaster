@@ -1,9 +1,18 @@
 set -eu
 
-gude="10.0.1.15"
-dev="gude"
-port=${1}
-status=${2}
+gude1="10.0.1.15"
+gude2="10.0.1.16"
+
+dev=$1
+port=$2
+status=$3
+
+if [ $dev -lt 1 -o $dev -gt 2 ]; then
+	echo "unkown dev numer: ${dev}"
+	exit 1
+fi
+
+eval gude=\${gude${dev}}
 
 if [ $port -lt 1 -o $port -gt 8 ]; then
 	echo "unkown port numer: ${port}"
