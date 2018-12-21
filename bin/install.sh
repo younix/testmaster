@@ -182,7 +182,8 @@ else
 	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/pxeboot
 
 	# XXX: quick fix for broken pxeboot loader AND raid controler
-	if [ ${machine} = "ot12" -o ${machine} = "ot13" ]; then
+	if [ ${machine} = "ot12" -o ${machine} = "ot13" -o \
+	     ${machine} = "ot14" -o ${machine} = "ot15" ]; then
 		cp /home/bluhm/pxeboot-nodisk ${tftp_dir}/auto_install
 	fi
 
