@@ -123,14 +123,14 @@ if [ -s "${tftp_dir}/${target:-invalid}" ]; then
 	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_install"
 fi
 
-if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
-	# generate random.seed file
-	mkdir -p ${tftp_dir}/etc -m 775
-	tmprand=`mktemp -p ${tftp_dir}/etc random.seed.XXXXXXXXXX`
-	dd if=/dev/random of=$tmprand bs=512 count=1 status=none
-	chmod 644 $tmprand
-	mv $tmprand ${tftp_dir}/etc/random.seed
+# generate random.seed file
+mkdir -p ${tftp_dir}/etc -m 775
+tmprand=`mktemp -p ${tftp_dir}/etc random.seed.XXXXXXXXXX`
+dd if=/dev/random of=$tmprand bs=512 count=1 status=none
+chmod 644 $tmprand
+mv $tmprand ${tftp_dir}/etc/random.seed
 
+if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	# set serial configuration for boot loader
 	cat - > ${tftp_dir}/etc/boot.conf <<-EOF
 		stty com0 115200
