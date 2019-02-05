@@ -3,22 +3,40 @@
 set -eux
 
 usage() {
-	echo "install [release]" > /dev/stderr
+	echo "install [-b target] [-r release]" > /dev/stderr
+	echo "    target     the name of the netboot file" > /dev/stderr
 	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
 	exit 1
 }
 
 release=snapshots
-if [ $# -eq 1 ]; then
-        release="$1"
-	if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
-		usage
-	fi
-	shift
+target=""
+args=`getopt b:r: $*`
+if [ $? -ne 0 ]; then
+	usage
 fi
-if [ $# -ne 0 ]; then
-        usage
-fi
+set -- $args
+while [ $# -ne 0 ]
+do
+	case "$1"
+	in
+		-b)
+			target="$2";
+			if echo "$target" | \
+				! grep -q '^[:alnum:][0-9A-Za-z._-]*$'; then
+				usage
+			fi
+			shift; shift;;
+		-r)
+			release="$2";
+			if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
+				usage
+			fi
+			shift; shift;;
+		--)
+			shift; break;;
+	esac
+done
 
 PATH="/home/test/bin:$PATH"
 
@@ -65,15 +83,13 @@ set_dhcpd_conf() {
 
 	set -eux
 
-	file="auto_install";
-
 	case "$1" in
 		"on")
 		action="host $machine { 		\
 			hardware ethernet $hwaddr;	\
 			fixed-address $ipaddr;		\
 			next-server $tftpserver;	\
-			filename \"$file\";		\
+			filename \"auto_install\";	\
 		} #$machine"
 		;;
 		*)
@@ -115,6 +131,7 @@ mkdir -p /var/www/htdocs/${machine}
 mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
 
 mkdir -p ${tftp_dir}
+rm -f ${tftp_dir}/invalid
 
 ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
 ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
