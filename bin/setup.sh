@@ -167,7 +167,7 @@ else
 fi
 
 # generate random.seed file
-mkdir -p ${tftp_dir}/etc -m 775
+mkdir -p -m 775 ${tftp_dir}/etc
 tmprand=`mktemp -p ${tftp_dir}/etc random.seed.XXXXXXXXXX`
 dd if=/dev/random of=$tmprand bs=512 count=1 status=none
 chmod 644 $tmprand
