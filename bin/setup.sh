@@ -2,8 +2,11 @@
 
 set -eux
 
+setup=$1
+shift
+
 usage() {
-	echo "install [-b target] [-k kernel] [-r release]" > /dev/stderr
+	echo "$setup [-b target] [-k kernel] [-r release]" > /dev/stderr
 	echo "    target     the name of the netboot file" > /dev/stderr
 	echo "    kernel     the name of the kernel file" > /dev/stderr
 	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
@@ -54,9 +57,9 @@ fi
 
 PATH="/home/test/bin:$PATH"
 
-echo "start installation of snapshot or release on machine $machine"
+echo "start $setup of snapshot or release on machine $machine"
 
-mk_install_conf() {
+mk_setup_conf() {
 	rm -f ${1}
 
 	cat > ${1} <<- EOF
@@ -71,26 +74,30 @@ mk_install_conf() {
 		Password for user = ${userpw}
 		Public ssh key for user = ${sshkey}
 		Allow root ssh login = yes
-$(if [ -n "${disk:-}" ]; then
-	echo "Which disk is the root disk = ${disk}";
-fi)
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
 		Server = ${setserver}
 		Server directory = pub/OpenBSD/${release}/${arch}
 		Use http instead = yes
 		Set name(s) = done
-		Location of sets = http
-		Server = ${siteserver}
-		Server directory = site
-		Use http instead = yes
-		INSTALL.${arch} not found. Use sets found here anyway = yes
-		Set name(s) = done
-		Continue without verification = yes
+		$(if [ -n "${disk:-}" ]; then
+			echo "Which disk is the root disk = ${disk}";
+		fi)
 	EOF
-#		Which network interface do you wish to configure = ${interface}
-#		Checksum test for site${version}.tgz failed. Continue anyway = yes
-#		Unverified sets: site${version}.tgz. Continue without verification = yes
+	if [ "$setup" = "install" ]; then
+		cat >> ${1} <<- EOF
+			Location of sets = http
+			Server = ${siteserver}
+			Server directory = site
+			Use http instead = yes
+			INSTALL.${arch} not found. Use sets found here anyway = yes
+			Set name(s) = done
+			Continue without verification = yes
+#			Which network interface do you wish to configure = ${interface}
+#			Checksum test for site${version}.tgz failed. Continue anyway = yes
+#			Unverified sets: site${version}.tgz. Continue without verification = yes
+		EOF
+	fi
 }
 
 set_dhcpd_conf() {
@@ -103,7 +110,7 @@ set_dhcpd_conf() {
 			hardware ethernet $hwaddr;	\
 			fixed-address $ipaddr;		\
 			next-server $tftpserver;	\
-			filename \"auto_install\";	\
+			filename \"auto_$setup\";	\
 		} #$machine"
 		;;
 		*)
@@ -142,18 +149,18 @@ else # default x86
 fi
 
 mkdir -p /var/www/htdocs/${machine}
-mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
+mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
 mkdir -p ${tftp_dir}
 rm -f ${tftp_dir}/invalid
 
 if [ -s "${tftp_dir}/${target:-invalid}" ]; then
-	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_install"
+	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_${setup}"
 else
-	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
+	ftp -o ${tftp_dir}/auto_${setup} http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
 fi
 
-if [ -n "$kernel" -a -s "${tftp_dir}/${kernel}" ]; then
+if [ -n "$kernel" ]; then
 	cp "${tftp_dir}/${kernel}" "${tftp_dir}/bsd"
 else
 	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd

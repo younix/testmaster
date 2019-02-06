@@ -31,13 +31,13 @@ case "$action" in
 		if ! test -f /home/$USER/env/install; then no_command; fi
 		if $setenv checklock.sh; then
 			shift
-			exec $setenv install.sh $*
+			exec $setenv setup.sh install $*
 		fi
 		;;
 	"upgrade")
 		if ! test -f /home/$USER/env/install; then no_command; fi
 		if $setenv checklock.sh; then
-			exec $setenv upgrade.sh
+			exec $setenv setup.sh upgrade $*
 		fi
 		;;
 	"env")
