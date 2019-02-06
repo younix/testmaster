@@ -172,9 +172,6 @@ else
 	# x86 default
 	#
 
-	rm -rf ${tftp_dir}
-	mkdir -p ${tftp_dir}
-
 	# get current bsd.rd and pxeboot file
 	rm -f ${tftp_dir}/bsd.new
 	ftp -o ${tftp_dir}/bsd.new http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
