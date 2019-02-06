@@ -3,15 +3,18 @@
 set -eux
 
 usage() {
-	echo "install [-b target] [-r release]" > /dev/stderr
+	echo "install [-b target] [-k kernel] [-r release]" > /dev/stderr
 	echo "    target     the name of the netboot file" > /dev/stderr
+	echo "    kernel     the name of the kernel file" > /dev/stderr
 	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
+	echo "               cannot be used with -b and -k" > /dev/stderr
 	exit 1
 }
 
 release=snapshots
 target=""
-args=`getopt b:r: $*`
+kernel=""
+args=`getopt b:k:r: $*`
 if [ $? -ne 0 ]; then
 	usage
 fi
@@ -23,7 +26,14 @@ do
 		-b)
 			target="$2";
 			if echo "$target" | \
-				! grep -q '^[:alnum:][0-9A-Za-z._-]*$'; then
+				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
+				usage
+			fi
+			shift; shift;;
+		-k)
+			kernel="$2";
+			if echo "$kernel" | \
+				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
 				usage
 			fi
 			shift; shift;;
@@ -37,6 +47,10 @@ do
 			shift; break;;
 	esac
 done
+
+if [ "$release" != "snapshots" -a -n "$target" -a -n "$kernel" ]; then
+	usage
+fi
 
 PATH="/home/test/bin:$PATH"
 
@@ -133,11 +147,16 @@ mk_install_conf /var/www/htdocs/${hwaddr}-install.conf
 mkdir -p ${tftp_dir}
 rm -f ${tftp_dir}/invalid
 
-ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
-ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
-
 if [ -s "${tftp_dir}/${target:-invalid}" ]; then
 	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_install"
+else
+	ftp -o ${tftp_dir}/auto_install http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
+fi
+
+if [ -n "$kernel" -a -s "${tftp_dir}/${kernel}" ]; then
+	cp "${tftp_dir}/${kernel}" "${tftp_dir}/bsd"
+else
+	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
 fi
 
 # generate random.seed file
