@@ -2,17 +2,20 @@
 
 set -eux
 
-setup=$1
-shift
-
 usage() {
-	echo "$setup [-b target] [-k kernel] [-r release]" > /dev/stderr
+	echo "setup.sh install|upgrade [-b target] [-k kernel] [-r release]" > /dev/stderr
 	echo "    target     the name of the netboot file" > /dev/stderr
 	echo "    kernel     the name of the kernel file" > /dev/stderr
 	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
 	echo "               cannot be used with -b and -k" > /dev/stderr
 	exit 1
 }
+
+setup=$1
+shift
+if [ "$setup" != "upgrade" ] && [ "$setup" != "install" ]; then
+	usage
+fi
 
 release=snapshots
 target=""
