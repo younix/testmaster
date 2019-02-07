@@ -68,14 +68,16 @@ mk_setup_conf() {
 	cat > ${1} <<- EOF
 		System hostname = ${machine}
 		DNS domain name = obsd-lab.genua.de
-		Password for root = ${rootpw}
+		Password for root = ${rootpw:-toor}
 		Public ssh key for root = ${sshkey}
 		Network interfaces = ${interface}
 		IPv4 address for ${interface} = ${ipaddr}
 		Default IPv4 route = 10.0.1.1
-		Setup a user = user
-		Password for user = ${userpw}
-		Public ssh key for user = ${sshkey}
+		$(if [ -n "${userpw:-}" ]; then
+			echo "Setup a user = user";
+			echo "Password for user = ${userpw}"
+			echo "Public ssh key for user = ${sshkey}"
+		fi)
 		Allow root ssh login = yes
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
@@ -84,18 +86,20 @@ mk_setup_conf() {
 		Use http instead = yes
 		Set name(s) = done
 		$(if [ -n "${disk:-}" ]; then
-			echo "Which disk is the root disk = ${disk}";
+			echo "Which disk is the root disk = ${disk}"
 		fi)
 	EOF
 	if [ "$setup" = "install" ]; then
 		cat >> ${1} <<- EOF
-			Location of sets = http
-			Server = ${siteserver}
-			Server directory = site
-			Use http instead = yes
-			INSTALL.${arch} not found. Use sets found here anyway = yes
-			Set name(s) = done
-			Continue without verification = yes
+		$(if [ -n "${siteserver:-}" ]; then
+			echo "Location of sets = http"
+			echo "Server = ${siteserver}"
+			echo "Server directory = site"
+			echo "Use http instead = yes"
+			echo "INSTALL.${arch} not found. Use sets found here anyway = yes"
+			echo "Set name(s) = done"
+			echo "Continue without verification = yes"
+		fi)
 #			Which network interface do you wish to configure = ${interface}
 #			Checksum test for site${version}.tgz failed. Continue anyway = yes
 #			Unverified sets: site${version}.tgz. Continue without verification = yes
