@@ -18,8 +18,6 @@ if [ "$setup" != "upgrade" ] && [ "$setup" != "install" ]; then
 fi
 
 release=snapshots
-target=""
-kernel=""
 args=`getopt b:k:r: $*`
 if [ $? -ne 0 ]; then
 	usage
@@ -54,7 +52,7 @@ do
 	esac
 done
 
-if [ "$release" != "snapshots" -a -n "$target" -a -n "$kernel" ]; then
+if [ "$release" != "snapshots" -a -n "${target:-}" -a -n "${kernel:-}" ]; then
 	usage
 fi
 
@@ -167,7 +165,7 @@ else
 	ftp -o ${tftp_dir}/auto_${setup} http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
 fi
 
-if [ -n "$kernel" ]; then
+if [ -n "${kernel:-}" ]; then
 	cp "${tftp_dir}/${kernel}" "${tftp_dir}/bsd"
 else
 	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
