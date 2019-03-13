@@ -48,8 +48,8 @@ case "$action" in
 	"lock")
 		exec $setenv lock.sh
 		;;
-	"free")
-		exec $setenv free.sh
+	"unlock")
+		exec $setenv unlock.sh
 		;;
 	"scp")
 		case "$command" in
@@ -73,7 +73,7 @@ case "$action" in
 			echo "upgrade - upgrade to current snapshot"
 		fi
 		echo "lock    - lock access to machine"
-		echo "free    - free access to machine"
+		echo "unlock  - remove lock from machine"
 		echo "help    - print this message"
 		;;
 	*)

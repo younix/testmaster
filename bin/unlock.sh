@@ -8,13 +8,13 @@ if [ -z "$testuser" ]; then
 fi
 
 if [ -z "$lock" ]; then
-	echo "$machine is free"
+	echo "$machine already unlocked"
 	exit 0
 fi
 
 if [ "$lock" = "$testuser" ]; then
 	rm /home/$USER/env/lock
-	echo "$machine is free"
+	echo "$machine unlocked"
 	exit 0
 else
 	echo "$machine is locked by $lock"
