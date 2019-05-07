@@ -128,10 +128,11 @@ set_dhcpd_conf() {
 		;;
 	esac
 
-	temp_file=`mktemp`
-	sed -e "s,^.*#$machine$,$action," /etc/dhcpd.conf > $temp_file
-	cat $temp_file > /etc/dhcpd.conf
-	rm -f $temp_file
+	flock /etc/dhcpd.conf ed /etc/dhcpd.conf <<-EOF
+		H
+		,s,^.*#$machine$,$action,
+		wq
+	EOF
 
 	doas /etc/rc.d/dhcpd restart
 }
