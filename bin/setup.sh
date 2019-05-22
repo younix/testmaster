@@ -2,6 +2,8 @@
 
 set -eux
 
+obsdmirror=[2001:1438:2012:c000::16]
+
 usage() {
 	echo "setup.sh install|upgrade [-b target] [-k kernel] [-r release]" > /dev/stderr
 	echo "    target     the name of the netboot file" > /dev/stderr
@@ -163,13 +165,13 @@ rm -f ${tftp_dir}/invalid
 if [ -s "${tftp_dir}/${target:-invalid}" ]; then
 	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_${setup}"
 else
-	ftp -o ${tftp_dir}/auto_${setup} http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/${netboot}
+	ftp -o ${tftp_dir}/auto_${setup} http://$obsdmirror/pub/OpenBSD/${release}/${arch}/${netboot}
 fi
 
 if [ -n "${kernel:-}" ]; then
 	cp "${tftp_dir}/${kernel}" "${tftp_dir}/bsd"
 else
-	ftp -o ${tftp_dir}/bsd http://[2001:a60:91df:c000::16]/pub/OpenBSD/${release}/${arch}/bsd.rd
+	ftp -o ${tftp_dir}/bsd http://$obsdmirror/pub/OpenBSD/${release}/${arch}/bsd.rd
 fi
 
 # generate random.seed file
