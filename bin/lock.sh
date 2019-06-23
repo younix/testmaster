@@ -9,7 +9,7 @@ fi
 
 if [ -z "$lock" ]; then
 	echo "$testuser" > /home/$USER/env/lock
-	echo "$machine is locked by $testuser"
+	echo "$machine locked"
 	exit 0
 fi
 
