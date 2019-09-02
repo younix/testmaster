@@ -22,7 +22,7 @@ ssh root@$host ifconfig > $ifconfig
 ssh root@$host 'usbdevs -vv' > $usbdevs
 ssh root@$host 'pcidump -v' > $pcidump
 
-cat > "./$host-info.html" <<- EOF
+cat <<- EOF
 <!doctype html>
 <html lang="en-US">
 <head>
