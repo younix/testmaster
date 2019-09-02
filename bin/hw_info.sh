@@ -1,6 +1,13 @@
 #!/bin/sh
 
-set -eux
+set -eu
+usage() {
+        echo "hw_info.sh host" > /dev/stderr
+	echo "    host    the hostname of the target machine" > /dev/stderr
+        exit 1
+}
+
+[ "$#" -eq "1" ] || usage
 
 host=$1
 dmesg=$(mktemp)
@@ -14,10 +21,6 @@ ssh root@$host sysctl > $sysctl
 ssh root@$host ifconfig > $ifconfig
 ssh root@$host 'usbdevs -vv' > $usbdevs
 ssh root@$host 'pcidump -v' > $pcidump
-
-# extract devices em0 etc from dmesg
-#cat $out | grep -e '^[a-z][a-z]*[0-9] ' | cut -d' ' -f1 | sort | uniq | less
-#cat $out | grep -e '^[a-z][a-z]*[0-9] ' | sort | uniq | less
 
 cat > "./$host-info.html" <<- EOF
 <!doctype html>
@@ -78,3 +81,5 @@ pre {
 </body>
 </html>
 EOF
+
+rm $dmesg $sysctl $ifconfig $usbdevs $pcidump
