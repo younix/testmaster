@@ -61,6 +61,9 @@ case "$action" in
 			;;
 		esac
 		;;
+	"info")
+		exec $setenv info.sh
+		;;
 	"help")
 		echo "        - console"
 		if test -f /home/$USER/env/powerdevice; then
@@ -74,6 +77,7 @@ case "$action" in
 		fi
 		echo "lock    - lock access to machine"
 		echo "unlock  - remove lock from machine"
+		echo "info    - collect information on machine"
 		echo "help    - print this message"
 		;;
 	*)

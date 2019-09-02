@@ -1,28 +1,20 @@
 #!/bin/sh
 
 set -eu
-usage() {
-        echo "hw_info.sh host" > /dev/stderr
-	echo "    host    the hostname of the target machine" > /dev/stderr
-        exit 1
-}
 
-[ "$#" -eq "1" ] || usage
-
-host=$1
 dmesg=$(mktemp)
 sysctl=$(mktemp)
 ifconfig=$(mktemp)
 usbdevs=$(mktemp)
 pcidump=$(mktemp)
 
-ssh root@$host 'cat /var/run/dmesg.boot' > $dmesg
-ssh root@$host sysctl > $sysctl
-ssh root@$host ifconfig > $ifconfig
-ssh root@$host 'usbdevs -vv' > $usbdevs
-ssh root@$host 'pcidump -v' > $pcidump
+ssh root@$machine 'cat /var/run/dmesg.boot' > $dmesg
+ssh root@$machine sysctl > $sysctl
+ssh root@$machine ifconfig > $ifconfig
+ssh root@$machine 'usbdevs -vv' > $usbdevs
+ssh root@$machine 'pcidump -v' > $pcidump
 
-cat <<- EOF
+cat << EOF
 <!doctype html>
 <html lang="en-US">
 <head>
@@ -36,11 +28,11 @@ pre {
 	word-wrap: anywhere;
 }
 	</style>
-        <title>$host info</title>
+        <title>$machine info</title>
 </head>
 <body>
 
-<h1><em>Open</em>BSDLab - $host info</h1>
+<h1><em>Open</em>BSDLab - $machine info</h1>
 
 <nav>
 <a href="index.html">Home</a>
@@ -50,7 +42,7 @@ pre {
 <a href="faq.html">faq</a>
 <hr></nav>
 
-<p>Automatically gathered information on $host.<br>
+<p>Automatically gathered information on $machine.<br>
 <em>last updated: $(date "+%Y-%m-%d %H:%M:%S")</em></p>
 
 <nav>
