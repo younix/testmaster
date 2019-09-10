@@ -36,11 +36,11 @@ pre {
 <h1><em>Open</em>BSDLab - $machine info</h1>
 
 <nav>
-<a href="index.html">Home</a>
-<a href="otx-config.html">otx config</a>
-<a href="newuser.html">new user</a>
-<a href="ssh_config.html">ssh_config</a>
-<a href="faq.html">faq</a>
+<a href="/index.html">Home</a>
+<a href="/otx-config.html">otx config</a>
+<a href="/newuser.html">new user</a>
+<a href="/ssh_config.html">ssh_config</a>
+<a href="/faq.html">faq</a>
 <hr></nav>
 
 <p>Automatically gathered information on $machine.<br>
