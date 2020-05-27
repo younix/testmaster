@@ -26,4 +26,4 @@ case "$action" in
 	;;
 esac
 
-echo "p${port}=${action}" > /dev/cuac10
+curl -s -u admin:admin -d "P${port}=${action}" -X POST http://10.0.1.17/config/home_f.html
