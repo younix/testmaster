@@ -152,6 +152,8 @@ elif [ "$arch" = "arm64" ]; then
 	netboot="BOOTAA64.EFI"
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
+elif [ "$arch" = "octeon" ]; then
+	netboot="bsd.rd"
 else # default x86
 	netboot="pxeboot"
 fi
