@@ -3,7 +3,7 @@
 setenv="/usr/local/bin/envdir /home/$USER/env"
 PATH="/home/test/bin:$PATH"
 
-function no_command {
+no_command() {
 	echo "command is not configured for $USER"
 	exit 1
 }
