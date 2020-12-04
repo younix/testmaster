@@ -31,4 +31,5 @@ case "${status}" in
 	;;
 esac
 
-/home/test/bin/openbmctool.py -H ${host} -U ${user} -P ${pass} chassis power ${action} > /dev/null
+/home/test/bin/openbmctool.py -H ${host} -U ${user} -P ${pass} chassis power \
+    ${action} >/dev/null
