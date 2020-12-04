@@ -5,11 +5,13 @@ set -eux
 obsdmirror=[2001:1438:2012:c000::16]
 
 usage() {
-	echo "setup.sh install|upgrade [-b target] [-k kernel] [-r release]" > /dev/stderr
-	echo "    target     the name of the netboot file" > /dev/stderr
-	echo "    kernel     the name of the kernel file" > /dev/stderr
-	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
-	echo "               cannot be used with -b and -k" > /dev/stderr
+	cat >/dev/stderr <<EOF
+setup.sh install|upgrade [-b target] [-k kernel] [-r release]
+    target	the name of the netboot file
+    kernel	the name of the kernel file
+    release	no snapshot, but release, like 6.3
+		cannot be used with -b and -k
+EOF
 	exit 1
 }
 
