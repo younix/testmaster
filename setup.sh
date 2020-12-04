@@ -147,14 +147,16 @@ on_exit() {
 trap on_exit EXIT
 
 tftp_dir="/var/spool/tftp/${machine}"
-if [ "$arch" = "armv7" ]; then
-	netboot="BOOTARM.EFI"
-elif [ "$arch" = "arm64" ]; then
+if [ "$arch" = "arm64" ]; then
 	netboot="BOOTAA64.EFI"
+elif [ "$arch" = "armv7" ]; then
+	netboot="BOOTARM.EFI"
+elif [ "$arch" = "octeon" ]; then
+	netboot=""
+elif [ "$arch" = "powerpc64" ]; then
+	netboot="bsd.rd"
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
-elif [ "$arch" = "octeon" ]; then
-	netboot="bsd.rd"
 else # default x86
 	netboot="pxeboot"
 fi
@@ -163,11 +165,15 @@ mkdir -p /var/www/htdocs/${machine}
 mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
 mkdir -p ${tftp_dir}
-rm -f ${tftp_dir}/invalid
+if [ "$arch" = "octeon" ]; then
+	touch ${tftp_dir}/invalid
+else
+	rm -f ${tftp_dir}/invalid
+fi
 
 if [ -s "${tftp_dir}/${target:-invalid}" ]; then
 	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_${setup}"
-else
+elif [ -s "${netboot}" ]; then
 	ftp -o ${tftp_dir}/auto_${setup} http://$obsdmirror/pub/OpenBSD/${release}/${arch}/${netboot}
 fi
 
