@@ -15,7 +15,6 @@ login.expect
 memtest.sh
 obmc.sh
 ofwprompt.expect
-openbmctool.py
 power.sh
 pxe.sh
 reboot.sh
