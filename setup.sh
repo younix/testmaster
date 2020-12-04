@@ -118,6 +118,7 @@ set_dhcpd_conf() {
 			fixed-address $ipaddr;		\
 			next-server $tftpserver;	\
 			filename \"auto_$setup\";	\
+			option option-209 \"tftp://$tftpserver/config\"; \
 		} #$machine"
 		;;
 		*)
