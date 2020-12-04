@@ -141,7 +141,7 @@ set_dhcpd_conf() {
 }
 
 on_exit() {
-	set_dhcpd_conf off	> /dev/null
+	set_dhcpd_conf off
 }
 
 trap on_exit EXIT
@@ -192,7 +192,7 @@ if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	EOF
 fi
 
-set_dhcpd_conf on	> /dev/null
+set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
 	printf "\n#.\nset bootmode forth\nreset\n\005c." | console -f $machine
@@ -212,5 +212,5 @@ else
 fi
 
 finish.expect
-set_dhcpd_conf off	> /dev/null
+set_dhcpd_conf off
 login.expect
