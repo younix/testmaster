@@ -16,6 +16,10 @@ case "$action" in
 ""|"console")
 	exec /usr/local/bin/console "$USER"
 	;;
+"bsdcons")
+	if ! test -f /var/consoles/$USER; then no_command; fi
+	exec bsdcons.sh /var/consoles/$USER
+	;;
 "on"|"off"|"cycle")
 	if ! test -f /home/$USER/env/powerdevice; then no_command; fi
 	if $setenv checklock.sh; then
