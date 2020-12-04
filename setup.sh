@@ -111,22 +111,22 @@ set_dhcpd_conf() {
 	set -eux
 
 	case "$1" in
-		"on")
-		action="host $machine { 		\
-			hardware ethernet $hwaddr;	\
-			fixed-address $ipaddr;		\
-			next-server $tftpserver;	\
-			filename \"auto_$setup\";	\
-			option option-209 \"tftp://$tftpserver/config\"; \
-		} #$machine"
+	"on")
+		action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"auto_$setup\"; \
+option option-209 \"tftp://$tftpserver/config\"; \
+} #$machine"
 		;;
-		*)
-		action="host $machine { 		\
-			hardware ethernet $hwaddr;	\
-			fixed-address $ipaddr;		\
-			next-server $tftpserver;	\
-			filename \"invalid\";		\
-		} #$machine"
+	*)
+		action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"invalid\"; \
+} #$machine"
 		;;
 	esac
 
