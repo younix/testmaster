@@ -1,3 +1,5 @@
+#!/bin/sh
+
 set -eu
 
 host=$1
