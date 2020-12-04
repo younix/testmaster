@@ -13,75 +13,75 @@ set -- $command
 action="$1"
 
 case "$action" in
-	""|"console")
-		exec /usr/local/bin/console "$USER"
+""|"console")
+	exec /usr/local/bin/console "$USER"
+	;;
+"on"|"off"|"cycle")
+	if ! test -f /home/$USER/env/powerdevice; then no_command; fi
+	if $setenv checklock.sh; then
+		exec $setenv power.sh $action
+	fi
+	;;
+"reboot")
+	if $setenv checklock.sh; then
+		exec $setenv reboot.sh
+	fi
+	;;
+"setup"|"install")
+	if ! test -f /home/$USER/env/install; then no_command; fi
+	if $setenv checklock.sh; then
+		shift
+		exec $setenv setup.sh install $*
+	fi
+	;;
+"upgrade")
+	if ! test -f /home/$USER/env/install; then no_command; fi
+	if $setenv checklock.sh; then
+		exec $setenv setup.sh upgrade $*
+	fi
+	;;
+"env")
+	if $setenv checklock.sh; then
+		exec $setenv env
+	fi
+	;;
+"lock")
+	exec $setenv lock.sh
+	;;
+"unlock")
+	exec $setenv unlock.sh
+	;;
+"scp")
+	case "$command" in
+	"scp -t .")
+		exec scp -t /var/spool/tftp/$USER
 		;;
-	"on"|"off"|"cycle")
-		if ! test -f /home/$USER/env/powerdevice; then no_command; fi
-		if $setenv checklock.sh; then
-			exec $setenv power.sh $action
-		fi
+	"scp -r -t .")
+		exec scp -r -t /var/spool/tftp/$USER
 		;;
-	"reboot")
-		if $setenv checklock.sh; then
-			exec $setenv reboot.sh
-		fi
-		;;
-	"setup"|"install")
-		if ! test -f /home/$USER/env/install; then no_command; fi
-		if $setenv checklock.sh; then
-			shift
-			exec $setenv setup.sh install $*
-		fi
-		;;
-	"upgrade")
-		if ! test -f /home/$USER/env/install; then no_command; fi
-		if $setenv checklock.sh; then
-			exec $setenv setup.sh upgrade $*
-		fi
-		;;
-	"env")
-		if $setenv checklock.sh; then
-			exec $setenv env
-		fi
-		;;
-	"lock")
-		exec $setenv lock.sh
-		;;
-	"unlock")
-		exec $setenv unlock.sh
-		;;
-	"scp")
-		case "$command" in
-		"scp -t .")
-			exec scp -t /var/spool/tftp/$USER
-			;;
-		"scp -r -t .")
-			exec scp -r -t /var/spool/tftp/$USER
-			;;
-		esac
-		;;
-	"info")
-		exec $setenv info.sh
-		;;
-	"help")
-		echo "        - console"
-		if test -f /home/$USER/env/powerdevice; then
-			echo "on      - power on"
-			echo "off     - power off"
-			echo "cycle   - power cycle"
-		fi
-		if test -f /home/$USER/env/install; then
-			echo "install - install current snapshot"
-			echo "upgrade - upgrade to current snapshot"
-		fi
-		echo "lock    - lock access to machine"
-		echo "unlock  - remove lock from machine"
-		echo "info    - collect information on machine"
-		echo "help    - print this message"
-		;;
-	*)
-		echo "unknown command";;
+	esac
+	;;
+"info")
+	exec $setenv info.sh
+	;;
+"help")
+	echo "        - console"
+	if test -f /home/$USER/env/powerdevice; then
+		echo "on      - power on"
+		echo "off     - power off"
+		echo "cycle   - power cycle"
+	fi
+	if test -f /home/$USER/env/install; then
+		echo "install - install current snapshot"
+		echo "upgrade - upgrade to current snapshot"
+	fi
+	echo "lock    - lock access to machine"
+	echo "unlock  - remove lock from machine"
+	echo "info    - collect information on machine"
+	echo "help    - print this message"
+	;;
+*)
+	echo "unknown command";;
 esac
 
 exit 1
