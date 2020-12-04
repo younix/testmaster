@@ -27,30 +27,29 @@ fi
 set -- $args
 while [ $# -ne 0 ]
 do
-	case "$1"
-	in
-		-b)
-			target="$2";
-			if echo "$target" | \
-				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
-				usage
-			fi
-			shift; shift;;
-		-k)
-			kernel="$2";
-			if echo "$kernel" | \
-				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
-				usage
-			fi
-			shift; shift;;
-		-r)
-			release="$2";
-			if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
-				usage
-			fi
-			shift; shift;;
-		--)
-			shift; break;;
+	case "$1" in
+	-b)
+		target="$2";
+		if echo "$target" | \
+			! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
+			usage
+		fi
+		shift; shift;;
+	-k)
+		kernel="$2";
+		if echo "$kernel" | \
+			! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
+			usage
+		fi
+		shift; shift;;
+	-r)
+		release="$2";
+		if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
+			usage
+		fi
+		shift; shift;;
+	--)
+		shift; break;;
 	esac
 done
 
