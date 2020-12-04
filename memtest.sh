@@ -11,11 +11,11 @@ fi
 
 echo "turn on memtest86+ over pxe boot for machine $machine"
 
-action="host $machine { 		\
-	hardware ethernet $hwaddr;	\
-	fixed-address $ipaddr;		\
-	next-server $tftpserver;	\
-	filename \"memtest.bin\";	\
+action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"memtest.bin\"; \
 } #$machine"
 
 temp_file=`mktemp`
