@@ -1,0 +1,27 @@
+OpenBSD Automatic Test Infrastructure Scripts
+
+A bunch of scripts that manage test machines genua OpenBSD lab.
+
+checklock.sh
+epower.sh
+finish.expect
+gude.sh
+info.sh
+ipmi.sh
+keyrollout.sh
+lock.sh
+lockcheck.sh
+login.expect
+memtest.sh
+obmc.sh
+ofwprompt.expect
+openbmctool.py
+power.sh
+pxe.sh
+reboot.sh
+run.sh
+setup.sh	- net install or upgrade a machine with autoinstaller
+sparcpower.sh
+ssh.sh
+tftpd.sed
+unlock.sh
