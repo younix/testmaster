@@ -5,11 +5,13 @@ set -eux
 obsdmirror=[2001:1438:2012:c000::16]
 
 usage() {
-	echo "setup.sh install|upgrade [-b target] [-k kernel] [-r release]" > /dev/stderr
-	echo "    target     the name of the netboot file" > /dev/stderr
-	echo "    kernel     the name of the kernel file" > /dev/stderr
-	echo "    release    no snapshot, but release, like 6.3" > /dev/stderr
-	echo "               cannot be used with -b and -k" > /dev/stderr
+	cat >/dev/stderr <<EOF
+setup.sh install|upgrade [-b target] [-k kernel] [-r release]
+    target	the name of the netboot file
+    kernel	the name of the kernel file
+    release	no snapshot, but release, like 6.3
+		cannot be used with -b and -k
+EOF
 	exit 1
 }
 
@@ -27,30 +29,29 @@ fi
 set -- $args
 while [ $# -ne 0 ]
 do
-	case "$1"
-	in
-		-b)
-			target="$2";
-			if echo "$target" | \
-				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
-				usage
-			fi
-			shift; shift;;
-		-k)
-			kernel="$2";
-			if echo "$kernel" | \
-				! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
-				usage
-			fi
-			shift; shift;;
-		-r)
-			release="$2";
-			if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
-				usage
-			fi
-			shift; shift;;
-		--)
-			shift; break;;
+	case "$1" in
+	-b)
+		target="$2";
+		if echo "$target" | \
+			! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
+			usage
+		fi
+		shift; shift;;
+	-k)
+		kernel="$2";
+		if echo "$kernel" | \
+			! grep -q '^[0-9A-Za-z][0-9A-Za-z._-]*$'; then
+			usage
+		fi
+		shift; shift;;
+	-r)
+		release="$2";
+		if echo "$release" | ! grep -q '^[0-9]\.[0-9]$'; then
+			usage
+		fi
+		shift; shift;;
+	--)
+		shift; break;;
 	esac
 done
 
@@ -112,21 +113,22 @@ set_dhcpd_conf() {
 	set -eux
 
 	case "$1" in
-		"on")
-		action="host $machine { 		\
-			hardware ethernet $hwaddr;	\
-			fixed-address $ipaddr;		\
-			next-server $tftpserver;	\
-			filename \"auto_$setup\";	\
-		} #$machine"
+	"on")
+		action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"auto_$setup\"; \
+option option-209 \"tftp://$tftpserver/config\"; \
+} #$machine"
 		;;
-		*)
-		action="host $machine { 		\
-			hardware ethernet $hwaddr;	\
-			fixed-address $ipaddr;		\
-			next-server $tftpserver;	\
-			filename \"invalid\";		\
-		} #$machine"
+	*)
+		action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"invalid\"; \
+} #$machine"
 		;;
 	esac
 
@@ -140,20 +142,22 @@ set_dhcpd_conf() {
 }
 
 on_exit() {
-	set_dhcpd_conf off	> /dev/null
+	set_dhcpd_conf off
 }
 
 trap on_exit EXIT
 
 tftp_dir="/var/spool/tftp/${machine}"
-if [ "$arch" = "armv7" ]; then
-	netboot="BOOTARM.EFI"
-elif [ "$arch" = "arm64" ]; then
+if [ "$arch" = "arm64" ]; then
 	netboot="BOOTAA64.EFI"
+elif [ "$arch" = "armv7" ]; then
+	netboot="BOOTARM.EFI"
+elif [ "$arch" = "octeon" ]; then
+	netboot=""
+elif [ "$arch" = "powerpc64" ]; then
+	netboot="bsd.rd"
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
-elif [ "$arch" = "octeon" ]; then
-	netboot="bsd.rd"
 else # default x86
 	netboot="pxeboot"
 fi
@@ -162,11 +166,15 @@ mkdir -p /var/www/htdocs/${machine}
 mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
 mkdir -p ${tftp_dir}
-rm -f ${tftp_dir}/invalid
+if [ "$arch" = "octeon" ]; then
+	touch ${tftp_dir}/invalid
+else
+	rm -f ${tftp_dir}/invalid
+fi
 
 if [ -s "${tftp_dir}/${target:-invalid}" ]; then
 	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_${setup}"
-else
+elif [ -s "${netboot}" ]; then
 	ftp -o ${tftp_dir}/auto_${setup} http://$obsdmirror/pub/OpenBSD/${release}/${arch}/${netboot}
 fi
 
@@ -191,7 +199,7 @@ if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	EOF
 fi
 
-set_dhcpd_conf on	> /dev/null
+set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
 	printf "\n#.\nset bootmode forth\nreset\n\005c." | console -f $machine
@@ -211,5 +219,5 @@ else
 fi
 
 finish.expect
-set_dhcpd_conf off	> /dev/null
+set_dhcpd_conf off
 login.expect
