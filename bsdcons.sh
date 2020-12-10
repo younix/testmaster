@@ -12,5 +12,5 @@ if ! [ -r "$1" ]; then
 	exit 1;
 fi
 
-tr -d '\r' <"$1" | 
+tr -d '\r' <"$1" |
     sed -n '/^Copyright (c) 1982, 1986, 1989, 1991, 1993$/{x;d;};H;${x;p;}'
