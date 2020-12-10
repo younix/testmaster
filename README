@@ -1,7 +1,8 @@
 OpenBSD Automatic Test Infrastructure Scripts
 
-A bunch of scripts that manage test machines genua OpenBSD lab.
+A bunch of scripts that manage test machines at genua OpenBSD lab.
 
+bsdcons.sh	- console output starting from the previous boot of bsd kernel
 checklock.sh
 epower.sh
 finish.expect
