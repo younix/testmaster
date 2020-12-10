@@ -16,6 +16,7 @@ login.expect
 memtest.sh
 obmc.sh
 ofwprompt.expect
+openbmctool.py	- connect to BMC to control system
 power.sh
 pxe.sh
 reboot.sh
