@@ -12,7 +12,23 @@ case "$1" in
 hardware ethernet $hwaddr; \
 fixed-address $ipaddr; \
 next-server $tftpserver; \
+filename \"boot\"; \
+} #$machine"
+	;;
+"install")
+	action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
 filename \"auto_install\"; \
+} #$machine"
+	;;
+"upgrade")
+	action="host $machine { \
+hardware ethernet $hwaddr; \
+fixed-address $ipaddr; \
+next-server $tftpserver; \
+filename \"auto_upgrade\"; \
 } #$machine"
 	;;
 "off")
