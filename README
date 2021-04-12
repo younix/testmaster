@@ -18,7 +18,7 @@ obmc.sh
 ofwprompt.expect
 openbmctool.py	- connect to BMC to control system
 power.sh
-pxe.sh
+pxe.sh		- switch dhcpd to pxe boot for a specific machine
 reboot.sh
 run.sh
 setup.sh	- net install or upgrade a machine with autoinstaller
