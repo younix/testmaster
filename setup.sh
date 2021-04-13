@@ -155,7 +155,7 @@ elif [ "$arch" = "armv7" ]; then
 elif [ "$arch" = "octeon" ]; then
 	netboot=""
 elif [ "$arch" = "powerpc64" ]; then
-	netboot="bsd.rd"
+	netboot=""
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
 else # default x86
