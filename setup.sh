@@ -101,9 +101,6 @@ mk_setup_conf() {
 			echo "Set name(s) = done"
 			echo "Continue without verification = yes"
 		fi)
-#			Which network interface do you wish to configure = ${interface}
-#			Checksum test for site${version}.tgz failed. Continue anyway = yes
-#			Unverified sets: site${version}.tgz. Continue without verification = yes
 		EOF
 	fi
 }
