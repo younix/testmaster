@@ -145,18 +145,24 @@ on_exit() {
 trap on_exit EXIT
 
 tftp_dir="/var/spool/tftp/${machine}"
-if [ "$arch" = "arm64" ]; then
+if [ "${netboot:-invalid}" != "invalid" ]; then
+	netboot="${netboot}"
+elif [ "$arch" = "amd64" ]; then
+	netboot="pxeboot"
+elif [ "$arch" = "arm64" ]; then
 	netboot="BOOTAA64.EFI"
 elif [ "$arch" = "armv7" ]; then
 	netboot="BOOTARM.EFI"
+elif [ "$arch" = "i386" ]; then
+	netboot="pxeboot"
 elif [ "$arch" = "octeon" ]; then
 	netboot=""
 elif [ "$arch" = "powerpc64" ]; then
 	netboot=""
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
-else # default x86
-	netboot="pxeboot"
+else
+	unset netboot;
 fi
 
 mkdir -p /var/www/htdocs/${machine}
