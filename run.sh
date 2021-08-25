@@ -41,6 +41,7 @@ case "$action" in
 "upgrade")
 	if ! test -f /home/$USER/env/install; then no_command; fi
 	if $setenv checklock.sh; then
+		shift
 		exec $setenv setup.sh upgrade $*
 	fi
 	;;
