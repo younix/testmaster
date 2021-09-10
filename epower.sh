@@ -27,6 +27,4 @@ case "$action" in
 esac
 
 curl -s -u admin:admin -d "P${port}=${action}" -X POST \
-    http://10.0.5.2/config/home_f.html
-curl -s -u admin:admin -d "P${port}=${action}" -X POST \
-    http://10.0.5.2/config/home_f.html
+    http://10.0.5.2/cmd.html
