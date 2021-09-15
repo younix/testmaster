@@ -27,22 +27,22 @@ done
 # collect interface information
 #
 
-for ot in 2 3 4; do
-        for i in 1 2 3 4 5 6 7 8 9; do
-                name=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifName.$i) || break
-                speed=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHighSpeed.$i) || break
+for ot in 2 3 4 11; do
+	for i in 1 2 3 4 5 6 7 8 9; do
+		name=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifName.$i) || break
+		speed=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHighSpeed.$i) || break
 
-                if [ "$name" = "No Such Object available on this agent at this OID" ]; then
-                        break 2
-                fi
+		if [ "$name" = "No Such Object available on this agent at this OID" ]; then
+			break 1
+		fi
 
-                echo "#ot${ot}i${i}::before { content: \"$name\"; }"
+		echo "#ot${ot}i${i}::before { content: \"$name\"; }"
 
-                if [ $speed -eq 0 ]; then
-                        echo "#ot${ot}i${i} { background-color: #d3d7cf; }"
-                else
-                        echo "#ot${ot}i${i} { background-color: #73d216; }"
-                fi
-        done
-        echo
+		if [ $speed -eq 0 ]; then
+			echo "#ot${ot}i${i} { background-color: #d3d7cf; }"
+		else
+			echo "#ot${ot}i${i} { background-color: #73d216; }"
+		fi
+	done
+	echo
 done
