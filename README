@@ -22,6 +22,7 @@ pxe.sh		- switch dhcpd to pxe boot for a specific machine
 reboot.sh
 run.sh
 setup.sh	- net install or upgrade a machine with autoinstaller
+snmp.sh		- fetches snmp data from the infrastructure for the website
 sparcpower.sh
 ssh.sh
 tftpd.sed
