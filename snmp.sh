@@ -36,6 +36,11 @@ for ot in 2 3 4 11; do
 			break 1
 		fi
 
+		if [ "$name" = "enc0" -o "$name" = "lo0" -o "$name" = "pflog0" ]; then
+			echo "#ot${ot}i${i} { display: none; }"
+			continue
+		fi
+
 		echo "#ot${ot}i${i}::before { content: \"$name\"; }"
 
 		if [ $speed -eq 0 ]; then
