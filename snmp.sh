@@ -27,7 +27,7 @@ done
 # collect interface information
 #
 
-for ot in 2 3 4 11; do
+for ot in 1 2 3 4 6 10 11 27 29; do
 	for i in 1 2 3 4 5 6 7 8 9; do
 		name=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifName.$i) || break
 		speed=$(snmp get -r 0 -Oqv ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHighSpeed.$i) || break
