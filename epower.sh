@@ -26,5 +26,6 @@ case "$action" in
 	;;
 esac
 
-curl -s -u admin:admin -d "P${port}=${action}" -X POST \
-    http://10.0.5.2/cmd.html
+while ! curl -s -u admin:admin -d "P${port}=${action}" -X POST \
+    http://10.0.5.2/cmd.html;
+	do echo "retry"; done
