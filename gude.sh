@@ -4,12 +4,13 @@ set -eu
 
 gude1="10.0.5.3"
 gude2="10.0.5.4"
+gude3="10.0.5.6"
 
 dev=$1
 port=$2
 status=$3
 
-if [ $dev -lt 1 -o $dev -gt 2 ]; then
+if [ $dev -lt 1 -o $dev -gt 3 ]; then
 	echo "unkown dev numer: ${dev}"
 	exit 1
 fi
