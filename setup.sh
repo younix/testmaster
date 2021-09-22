@@ -165,62 +165,76 @@ else
 	unset netboot;
 fi
 
-mkdir -p /var/www/htdocs/${machine}
 mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
-mkdir -p ${tftp_dir}
-if [ "$arch" = "octeon" ]; then
-	touch ${tftp_dir}/invalid
-else
-	rm -f ${tftp_dir}/invalid
-fi
-
-if [ -s "${tftp_dir}/${target:-invalid}" ]; then
-	cp "${tftp_dir}/${target:-invalid}" "${tftp_dir}/auto_${setup}"
-elif [ -s "${netboot}" ]; then
-	ftp -o ${tftp_dir}/auto_${setup} http://$obsdmirror/pub/OpenBSD/${release}/${arch}/${netboot}
-fi
-
-if [ -n "${kernel:-}" ]; then
-	cp "${tftp_dir}/${kernel}" "${tftp_dir}/bsd"
-else
-	ftp -o ${tftp_dir}/bsd http://$obsdmirror/pub/OpenBSD/${release}/${arch}/bsd.rd
-fi
-
-# generate random.seed file
+mkdir -p -m 775 ${tftp_dir}
 mkdir -p -m 775 ${tftp_dir}/etc
-tmprand=`mktemp -p ${tftp_dir}/etc random.seed.XXXXXXXXXX`
-dd if=/dev/random of=$tmprand bs=512 count=1 status=none
-chmod 644 $tmprand
-mv $tmprand ${tftp_dir}/etc/random.seed
 
+cd ${tftp_dir}
+
+if [ "$arch" = "octeon" ]; then
+	touch invalid
+else
+	rm -f invalid
+fi
+
+if [ -z "${target:-}" ]; then
+	if [ -n "${netboot:-}" ]; then
+		ftp http://$obsdmirror/pub/OpenBSD/$release/$arch/$netboot
+	fi
+	target=${netboot:-invalid}
+fi
+ln -sf $target auto_$setup
+
+if [ -z "${kernel:-}" ]; then
+	ftp http://$obsdmirror/pub/OpenBSD/$release/$arch/bsd.rd
+	kernel=bsd.rd
+fi
+
+rm -f etc/boot.conf.tmp
 if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	# set serial configuration for boot loader
-	cat - > ${tftp_dir}/etc/boot.conf <<-EOF
-		stty com0 115200
-		set tty com0
-	EOF
+	echo stty com0 115200 >>etc/boot.conf.tmp
+	echo set tty com0 >>etc/boot.conf.tmp
 fi
+echo set image $kernel >>etc/boot.conf.tmp
+mv etc/boot.conf.tmp etc/boot.conf
+
+rm -f etc/random.seed.tmp
+dd if=/dev/random of=etc/random.seed.tmp bs=512 count=1 status=none
+chmod 644 etc/random.seed.tmp
+mv etc/random.seed.tmp etc/random.seed
 
 set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
-	printf "\n#.\nset bootmode forth\nreset\n\005c." | console -f $machine
-
-	ofwprompt.expect
-	(printf "setenv auto-boot? false\n"; sleep 1;
-	 printf "setenv boot-device net\n"; sleep 1;
-	 printf "reset\n\005c.") | console -f $machine
-
-	ofwprompt.expect
-	printf "reset\n\005c." | console -f $machine
-
-	ofwprompt.expect
-	printf "boot net\n\005c." | console -f $machine
+	while true; do
+		ssh root@${ipaddr} shutdown -h now ||
+		    printf "\n\005c." | console -f $machine
+		ofwprompt.expect && break
+		printf "\n\005cl0\005c." | console -f $machine
+		ofwprompt.expect && break
+		printf "\n#.\005c." | console -f $machine
+		if lomprompt.expect; then
+			printf "\nset bootmode forth\nreset\n\005c." |
+			    console -f $machine
+			ofwprompt.expect && break
+		fi
+		power.sh cycle
+		sleep 300
+		ofwprompt.expect && break
+		false
+	done
+	printf "boot net $kernel\n\005c." | console -f $machine
 else
 	ssh root@${ipaddr} shutdown -r now || power.sh cycle
 fi
 
 finish.expect
 set_dhcpd_conf off
+if [ "$arch" = "sparc64" ]; then
+	if ofwprompt.expect; then
+		printf "boot disk\n\005c." | console -f $machine
+	fi
+fi
 login.expect

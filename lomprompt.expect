@@ -1,5 +1,5 @@
 #!/usr/local/bin/expect -f
 
-set timeout 60
+set timeout 10
 spawn tail -n 1 -f "/var/consoles/$env(machine)"
-expect timeout { exit 1 } -re " ok $" { exit 0 }
+expect timeout { exit 1 } -re "lom>$" { exit 0 }
