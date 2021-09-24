@@ -26,6 +26,14 @@ case "$action" in
 	;;
 esac
 
+timeout=$(($(date +%s) + 300));
 while ! curl -s -u admin:admin -d "P${port}=${action}" -X POST \
-    http://10.0.5.2/cmd.html;
-	do echo "retry"; done
+    http://10.0.5.2/cmd.html; do
+	if [ $(date +%s) -gt $timeout ]; then
+		echo timeout
+		exit 1
+	fi
+	sleep 1
+	echo -n "retry epower $port $action "
+	date
+done
