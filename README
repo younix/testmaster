@@ -20,7 +20,7 @@ lomprompt.expect - wait for sparc64 light out management prompt
 openbmctool.py	- connect to BMC to control system
 power.sh
 pxe.sh		- switch dhcpd to pxe boot for a specific machine
-reboot.sh
+reboot.sh	- run shutdown reboot or power cycle, wait for login prompt
 run.sh
 setup.sh	- net install or upgrade a machine with autoinstaller
 snmp.sh		- fetches snmp data from the infrastructure for the website
