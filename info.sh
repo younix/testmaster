@@ -40,7 +40,10 @@ pre {
   <a href="/otx-config.html">otx config</a>
   <a href="/newuser.html">new user</a>
   <a href="/ssh_config.html">ssh_config</a>
+  <a href="/upgrade.html">upgrade</a>
+  <a href="/hw-setup.html">hardware setup</a>
   <a href="/faq.html">faq</a>
+  <a href="/state.html">state</a>
   <hr>
 </nav>
 
