@@ -7,7 +7,7 @@ checklock.sh
 epower.sh
 finish.expect
 gude.sh
-info.sh
+info.sh		- collection hardware infos from machines for the website
 ipmi.sh
 keyrollout.sh
 lock.sh
