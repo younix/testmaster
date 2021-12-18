@@ -13,5 +13,6 @@ if ! login.expect; then
 	printf "\n\005c." | console -f $machine
 	sleep 1
 	printf "\n\005c." | console -f $machine
-	login.expect
+	sleep 1
+	tail -n 16 "/var/consoles/$machine" | grep '^login: '
 fi
