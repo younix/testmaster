@@ -237,4 +237,12 @@ if [ "$arch" = "sparc64" ]; then
 		printf "boot disk\n\005c." | console -f $machine
 	fi
 fi
-login.expect
+
+if ! login.expect; then
+	echo "no login prompt on machine $machine, send two newline"
+	printf "\n\005c." | console -f $machine
+	sleep 1
+	printf "\n\005c." | console -f $machine
+	sleep 1
+	tail -n 16 "/var/consoles/$machine" | grep '^login: '
+fi
