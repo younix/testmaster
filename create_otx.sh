@@ -11,7 +11,7 @@ id ot$no && exit 1
 
 useradd -m -G test -c "OpenBSD Test $no" ot$no
 
-if [ -e $bak/../.ssh/id_rsa ]; then
+if [ -e $bak/.ssh/id_rsa ]; then
 	cp $bak/.ssh/id_rsa* /home/ot$no/.ssh
 else
 	doas -u ot$no ssh-keygen -N "" -f /home/ot$no/.ssh/id_rsa
