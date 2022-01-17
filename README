@@ -31,3 +31,6 @@ unlock.sh
 create_ttyc.sh	- create /dev/{tty,cua}c* devices for cy(4) cards
 create_otx.sh	- create ot user for new machine
 delete_otx.sh	- delete ot user
+
+Requirements:
+	pkg_add conserver freedt flock expect
