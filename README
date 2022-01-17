@@ -28,3 +28,4 @@ sparcpower.sh
 ssh.sh
 tftpd.sed
 unlock.sh
+create_ttyc.sh	- create /dev/{tty,cua}c* devices for cy(4) cards
