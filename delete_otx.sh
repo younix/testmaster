@@ -20,7 +20,7 @@ ed -s /etc/hosts <<-EOF
 EOF
 
 ed -s test1 <<-EOF
-	/Match User ot$no
+	/Match User ot$no$
 	-1,+4d
 	w
 EOF
