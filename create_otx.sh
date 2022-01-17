@@ -9,6 +9,7 @@ env="/home/ot$nr/env"
 id ot$nr && exit 1
 
 useradd -m -G test -c "OpenBSD Test $nr" ot$nr
+doas -u ot$nr ssh-keygen -N "" -f /home/ot$nr/.ssh/id_rsa
 
 mkdir -p $env
 echo "10.0.1.$ip"	> /home/ot$nr/env/ipaddr
@@ -30,5 +31,11 @@ ln -s ot$nr 10.0.1.$ip
 
 echo "10.0.1.$ip	ot$nr" >> /etc/hosts
 
-#rm -f /home/ot$nr/.ssh/id_rsa*
-doas -u ot$nr ssh-keygen -N "" -f /home/ot$nr/.ssh/id_rsa
+cat >> /etc/ssh/sshd_config <<EOF
+
+Match User ot$nr
+	ForceCommand /home/test/bin/run.sh
+	X11Forwarding no
+	AllowAgentForwarding no
+	PermitOpen 10.0.1.$ip:22
+EOF

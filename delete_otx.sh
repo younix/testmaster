@@ -18,3 +18,9 @@ ed -s /etc/hosts <<-EOF
 	/10.0.1.$ip/d
 	w
 EOF
+
+ed -s test1 <<-EOF
+	/Match User ot$no
+	-1,+4d
+	w
+EOF
