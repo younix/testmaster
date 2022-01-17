@@ -2,38 +2,38 @@
 
 set -eux
 
-nr=$1
-ip=$((nr + 20))
-env="/home/ot$nr/env"
+no=$1
+ip=$((no + 20))
+env="/home/ot$no/env"
 
-id ot$nr && exit 1
+id ot$no && exit 1
 
-useradd -m -G test -c "OpenBSD Test $nr" ot$nr
-doas -u ot$nr ssh-keygen -N "" -f /home/ot$nr/.ssh/id_rsa
+useradd -m -G test -c "OpenBSD Test $no" ot$no
+doas -u ot$no ssh-keygen -N "" -f /home/ot$no/.ssh/id_rsa
 
 mkdir -p $env
-echo "10.0.1.$ip"	> /home/ot$nr/env/ipaddr
-echo "ot$nr"		> /home/ot$nr/env/machine
-echo "toor"		> /home/ot$nr/env/rootpw
-echo "roottoor"		> /home/ot$nr/env/userpw
-echo "10.0.1.1"		> /home/ot$nr/env/tftpserver
-echo "10.0.1.2"		> /home/ot$nr/env/sideserver
-echo "10.0.1.3"		> /home/ot$nr/env/setserver
+echo "10.0.1.$ip"	> /home/ot$no/env/ipaddr
+echo "ot$no"		> /home/ot$no/env/machine
+echo "toor"		> /home/ot$no/env/rootpw
+echo "roottoor"		> /home/ot$no/env/userpw
+echo "10.0.1.1"		> /home/ot$no/env/tftpserver
+echo "10.0.1.2"		> /home/ot$no/env/sideserver
+echo "10.0.1.3"		> /home/ot$no/env/setserver
 
-chown -R root:ot$nr $env
+chown -R root:ot$no $env
 chmod u=rwx,g=rx,o=rx $env
 chmod u=rw,g=r,o=r $env/*
 
 cd /var/spool/tftp
-mkdir ot$nr
-chown ot$nr:ot$nr ot$nr
-ln -s ot$nr 10.0.1.$ip
+mkdir ot$no
+chown ot$no:ot$no ot$no
+ln -s ot$no 10.0.1.$ip
 
-echo "10.0.1.$ip	ot$nr" >> /etc/hosts
+echo "10.0.1.$ip	ot$no" >> /etc/hosts
 
 cat >> /etc/ssh/sshd_config <<EOF
 
-Match User ot$nr
+Match User ot$no
 	ForceCommand /home/test/bin/run.sh
 	X11Forwarding no
 	AllowAgentForwarding no
