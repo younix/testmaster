@@ -24,3 +24,8 @@ ed -s test1 <<-EOF
 	-1,+4d
 	w
 EOF
+
+ed -s /etc/conserver.cf <<-EOF
+	/console ot$no {/d
+	w
+EOF

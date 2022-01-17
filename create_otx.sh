@@ -39,3 +39,5 @@ Match User ot$no
 	AllowAgentForwarding no
 	PermitOpen 10.0.1.$ip:22
 EOF
+
+echo "console ot$no { include cyclades; device /dev/cuaXX; rw ot$no; }" >> /etc/conserver.cf
