@@ -27,8 +27,9 @@ case "$action" in
 esac
 
 timeout=$(($(date +%s) + 300));
-while ! curl -s -u admin:admin -d "P${port}=${action}" -X POST \
-    http://10.0.5.2/cmd.html; do
+# curl may print "401 Authorization Required", retry until it is quiet
+while curl -s -u admin:admin --basic -d "P${port}=${action}" -X POST \
+    http://10.0.5.2/cmd.html | grep .; do
 	if [ $(date +%s) -gt $timeout ]; then
 		echo timeout
 		exit 1
