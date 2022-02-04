@@ -222,6 +222,7 @@ if [ "$arch" = "sparc64" ]; then
 		fi
 		power.sh cycle
 		sleep 300
+		printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
 		false
 	done
