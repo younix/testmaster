@@ -3,21 +3,17 @@
 set -eu
 
 dmesg=$(mktemp)
-dmesg_tmp=$(mktemp)
 sysctl=$(mktemp)
 ifconfig=$(mktemp)
 usbdevs=$(mktemp)
 pcidump=$(mktemp)
 
-ssh root@$machine 'cat /var/run/dmesg.boot' > $dmesg_tmp
+ssh root@$machine "sed -n '/^OpenBSD/{x;d;};H;\${x;p;}' /var/run/dmesg.boot" \
+	> $dmesg
 ssh root@$machine sysctl > $sysctl
 ssh root@$machine ifconfig > $ifconfig
 ssh root@$machine 'usbdevs -vv' > $usbdevs
 ssh root@$machine 'pcidump -v' > $pcidump
-
-dmesg_start=$(grep -n ^OpenBSD $dmesg_tmp | tail -1 | grep -oE ^[0-9]+)
-dmesg_end=$(wc -l $dmesg_tmp | tr -d ' ' | grep -oE ^[0-9]+)
-tail -n $((dmesg_end - dmesg_start + 1)) $dmesg_tmp > $dmesg
 
 cat << EOF
 <!doctype html>
@@ -87,4 +83,4 @@ pre {
 </html>
 EOF
 
-rm $dmesg_tmp $dmesg $sysctl $ifconfig $usbdevs $pcidump
+rm $dmesg $sysctl $ifconfig $usbdevs $pcidump
