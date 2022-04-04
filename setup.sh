@@ -211,7 +211,7 @@ set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
 	while true; do
-		ssh root@${ipaddr} shutdown -h now ||
+		ssh root@${ipaddr} shutdown -h now halt by testmaster ||
 		    printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
 		printf "\n\005cl0\005c." | console -f $machine
@@ -230,7 +230,8 @@ if [ "$arch" = "sparc64" ]; then
 	done
 	printf "boot net $kernel\n\005c." | console -f $machine
 else
-	ssh root@${ipaddr} shutdown -r now || power.sh cycle
+	ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
+	    power.sh cycle
 fi
 
 finish.expect
