@@ -19,6 +19,7 @@ ofwprompt.expect - wait for sparc64 openfirmware prompt
 lomprompt.expect - wait for sparc64 light out management prompt
 openbmctool.py	- connect to BMC to control system
 power.sh
+powerdown.sh	- run shutdown power down or turn power off
 pxe.sh		- switch dhcpd to pxe boot for a specific machine
 reboot.sh	- run shutdown reboot or power cycle, wait for login prompt
 run.sh
