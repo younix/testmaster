@@ -1,5 +1,5 @@
 #!/usr/local/bin/expect -f
 
 set timeout 60
-spawn tail -n 10 -f "/var/consoles/$env(machine)"
+spawn tail -n 5 -f "/var/consoles/$env(machine)"
 expect timeout { exit 1 } "syncing disks.* done" { exit 0 }

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
 PATH="/home/test/bin:$PATH"
 
