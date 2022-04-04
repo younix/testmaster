@@ -19,6 +19,8 @@ ofwprompt.expect - wait for sparc64 openfirmware prompt
 lomprompt.expect - wait for sparc64 light out management prompt
 openbmctool.py	- connect to BMC to control system
 power.sh
+powerdown.sh	- run shutdown power down or turn power off
+powerup.sh	- machine is up and running or power cycle
 pxe.sh		- switch dhcpd to pxe boot for a specific machine
 reboot.sh	- run shutdown reboot or power cycle, wait for login prompt
 run.sh
@@ -26,6 +28,7 @@ setup.sh	- net install or upgrade a machine with autoinstaller
 snmp.sh		- fetches snmp data from the infrastructure for the website
 sparcpower.sh
 ssh.sh
+syncingdisks.expect	- wait 1 minute for syncing disks... done output
 tftpd.sed
 unlock.sh
 create_ttyc.sh	- create /dev/{tty,cua}c* devices for cy(4) cards

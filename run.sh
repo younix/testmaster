@@ -26,9 +26,9 @@ case "$action" in
 		exec $setenv power.sh $action
 	fi
 	;;
-"reboot")
+"powerdown"|"powerup"|"reboot")
 	if $setenv checklock.sh; then
-		exec $setenv reboot.sh
+		exec $setenv $action.sh
 	fi
 	;;
 "setup"|"install")
