@@ -159,6 +159,8 @@ elif [ "$arch" = "octeon" ]; then
 	netboot=""
 elif [ "$arch" = "powerpc64" ]; then
 	netboot=""
+elif [ "$arch" = "riscv64" ]; then
+	netboot="BOOTRISCV64.EFI"
 elif [ "$arch" = "sparc64" ]; then
 	netboot="ofwboot.net"
 else
