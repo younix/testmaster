@@ -207,7 +207,7 @@ mv etc/random.seed.tmp etc/random.seed
 set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
-	while true; do
+	for i in 1 2; do
 		ssh root@${ipaddr} shutdown -h now halt by testmaster ||
 		    printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
@@ -220,7 +220,7 @@ if [ "$arch" = "sparc64" ]; then
 			ofwprompt.expect && break
 		fi
 		power.sh cycle
-		sleep 300
+		login.expect && continue
 		printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
 		false
