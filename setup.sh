@@ -157,6 +157,9 @@ elif [ "$arch" = "i386" ]; then
 	netboot="pxeboot"
 elif [ "$arch" = "octeon" ]; then
 	netboot=""
+	if [ -z "${target:-}" ]; then
+		target="${kernel:-bsd.rd}"
+	fi
 elif [ "$arch" = "powerpc64" ]; then
 	netboot=""
 elif [ "$arch" = "riscv64" ]; then
@@ -174,23 +177,17 @@ mkdir -p -m 775 ${tftp_dir}/etc
 
 cd ${tftp_dir}
 
-if [ "$arch" = "octeon" ]; then
-	touch invalid
-else
-	rm -f invalid
-fi
-
 if [ -z "${target:-}" ]; then
 	if [ -n "${netboot:-}" ]; then
-		ftp http://$obsdmirror/pub/OpenBSD/$release/$arch/$netboot
+		ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/$netboot"
 	fi
-	target=${netboot:-invalid}
+	target="${netboot:-invalid}"
 fi
 ln -sf $target auto_$setup
 
 if [ -z "${kernel:-}" ]; then
-	ftp http://$obsdmirror/pub/OpenBSD/$release/$arch/bsd.rd
-	kernel=bsd.rd
+	ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/bsd.rd"
+	kernel="bsd.rd"
 fi
 
 rm -f etc/boot.conf.tmp
