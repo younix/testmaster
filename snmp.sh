@@ -31,6 +31,20 @@ for g in $GUDES; do
 	echo
 done
 
+# gude 4
+for p in $(jot 12); do
+	stat=$(snmp get $snmparg gude4 1.3.6.1.4.1.28507.56.1.3.1.2.1.3.$p)
+	name=$(snmp get $snmparg gude4 1.3.6.1.4.1.28507.56.1.3.1.2.1.2.$p)
+
+	echo "#g4p${p}::before { content: \"$name\"; }"
+	if [ $stat -eq 1 ]; then
+		echo "#g4p${p} { background-color: #73d216; }"
+	else
+		echo "#g4p${p} { background-color: #cc0000; }"
+	fi
+done
+echo
+
 #
 # collect interface information
 #
