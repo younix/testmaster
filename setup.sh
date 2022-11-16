@@ -225,7 +225,7 @@ if [ "$arch" = "sparc64" ]; then
 		ofwprompt.expect && break
 		false
 	done
-	printf "boot net $kernel\n\005c." | console -f $machine
+	printf "boot net:rarp $kernel\n\005c." | console -f $machine
 else
 	ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
 	    power.sh cycle
