@@ -2,4 +2,4 @@
 
 set timeout 10
 spawn tail -n 1 -f "/var/consoles/$env(machine)"
-expect timeout { exit 1 } -re "lom>$" { exit 0 }
+expect timeout { exit 1 } -re "(lom|sc)> *$" { exit 0 }
