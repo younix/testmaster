@@ -45,6 +45,22 @@ for p in $(jot 12); do
 done
 echo
 
+# epower
+p=1
+ftp -o /dev/stdout http://admin:admin@epower/config/home_f.html | \
+    grep ^socket | tr -d ' ' | cut -d, -f2,3 | while read s; do
+	stat="${s##*,}"
+	name="${s%%,*}"
+	echo "#ep${p}::before { content: $name; }"
+	if [ $stat -eq 1 ]; then
+		echo "#ep${p} { background-color: #73d216; }"
+	else
+		echo "#ep${p} { background-color: #cc0000; }"
+	fi
+	p=$((p + 1))
+done
+echo
+
 #
 # collect interface information
 #
