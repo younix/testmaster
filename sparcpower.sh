@@ -11,16 +11,13 @@ if [ $# -ne 2 ]; then
 	usage
 fi
 
-echo blub
-echo blub
-
 port=$1
 action=$2
 
 case "$action" in
 "0")
 	echo "power off, machine $machine, send poweroff via lom"
-	printf "\n#.\npoweroff\nconsole\n\005c." | console -f $machine
+	printf "\n#.\npoweroff -y\nconsole\n\005c." | console -f $machine
 	;;
 "1")
 	echo "power on, machine $machine, send poweron via lom"

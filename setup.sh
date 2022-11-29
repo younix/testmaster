@@ -208,15 +208,17 @@ set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
 	for i in 1 2; do
-		ssh root@${ipaddr} shutdown -h now halt by testmaster ||
-		    printf "\n\005c." | console -f $machine
+		timeout 60 ssh root@${ipaddr} shutdown -h now halt by \
+		    testmaster || printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
-		printf "\n\005cl0\005c." | console -f $machine
-		ofwprompt.expect && break
+		# like reset on v440, might be necessary on other sparcs:
+		#printf "\n\005cl0\005c." | console -f $machine
+		#ofwprompt.expect && break
 		printf "\n#.\005c." | console -f $machine
 		if lomprompt.expect; then
-			printf "\nset bootmode forth\nreset\n\005c." |
-			    console -f $machine
+			printf "\nreset -cxy\n" | console -f $machine
+			sleep 900 # v440 checks after reset take about 10 min
+			printf "\n\005c." | console -f $machine
 			ofwprompt.expect && break
 		fi
 		power.sh cycle
@@ -227,7 +229,7 @@ if [ "$arch" = "sparc64" ]; then
 	done
 	printf "boot net:rarp $kernel\n\005c." | console -f $machine
 else
-	ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
+	timeout 60 ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
 	    power.sh cycle
 fi
 
