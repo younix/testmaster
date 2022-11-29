@@ -71,7 +71,11 @@ for ot in $HOSTS; do
 		speed=$(snmp get $snmparg -r 0 ot$ot .iso.org.dod.internet.mgmt.mib_2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHighSpeed.$i) || break
 
 		if [ "$name" = "No Such Object available on this agent at this OID" ]; then
-			break 1
+			continue
+		fi
+
+		if [ "$name" = "No Such Instance currently exists at this OID" ]; then
+			continue
 		fi
 
 		if [ "$name" = "No Such Instance currently exists at this OID" ]; then
