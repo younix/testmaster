@@ -78,10 +78,6 @@ for ot in $HOSTS; do
 			continue
 		fi
 
-		if [ "$name" = "No Such Instance currently exists at this OID" ]; then
-			break 1
-		fi
-
 		if [ "$name" = "enc0" -o "$name" = "lo0" -o "$name" = "pflog0" ]; then
 			echo "#ot${ot}i${i} { display: none; }"
 			continue
