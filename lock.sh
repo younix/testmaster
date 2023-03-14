@@ -7,8 +7,10 @@ if [ -z "$testuser" ]; then
 	exit 1
 fi
 
+lock=$(cat /home/$USER/lock)
+
 if [ -z "$lock" ]; then
-	echo "$testuser" > /home/$USER/env/lock
+	echo "$testuser" > /home/$USER/lock
 	echo "$machine locked"
 	exit 0
 fi

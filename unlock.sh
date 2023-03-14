@@ -7,13 +7,15 @@ if [ -z "$testuser" ]; then
 	exit 1
 fi
 
+lock=$(cat /home/$USER/lock)
+
 if [ -z "$lock" ]; then
 	echo "$machine already unlocked"
 	exit 0
 fi
 
 if [ "$lock" = "$testuser" ]; then
-	rm /home/$USER/env/lock
+	:> /home/$USER/lock
 	echo "$machine unlocked"
 	exit 0
 else
