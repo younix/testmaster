@@ -6,7 +6,7 @@ PATH="/home/test/bin:$PATH"
 
 echo "power up machine $machine"
 
-if ! ssh root@${ipaddr} true; then
+if ! timeout 60 ssh root@${ipaddr} true; then
 	power.sh cycle
 
 	if ! login.expect; then
