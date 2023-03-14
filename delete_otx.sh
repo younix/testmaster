@@ -5,6 +5,8 @@ set -eux
 no=$1
 ip=$((no + 20))
 
+id ot$no || exit 1
+
 userdel ot$no
 groupdel ot$no
 rm -r /home/ot$no
