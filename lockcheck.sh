@@ -2,6 +2,8 @@
 
 set -e
 
+lock=$(cat /home/$USER/lock)
+
 if [ -z "$lock" ]; then
 	exit 0
 fi
