@@ -6,7 +6,8 @@ PATH="/home/test/bin:$PATH"
 
 echo "reboot machine $machine"
 
-ssh root@${ipaddr} shutdown -r now reboot by testmaster || power.sh cycle
+timeout 60 ssh root@${ipaddr} shutdown -r now reboot by testmaster || \
+	power.sh cycle
 
 if ! login.expect; then
 	echo "no login prompt on machine $machine, send two newline"
