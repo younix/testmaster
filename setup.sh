@@ -208,7 +208,7 @@ set_dhcpd_conf on
 
 if [ "$arch" = "sparc64" ]; then
 	for i in 1 2; do
-		timeout 60 ssh root@${ipaddr} shutdown -h now halt by \
+		timeout 180 ssh root@${ipaddr} shutdown -h now halt by \
 		    testmaster || printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
 		# like reset on v440, might be necessary on other sparcs:
