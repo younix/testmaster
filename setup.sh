@@ -222,7 +222,9 @@ if [ "$arch" = "sparc64" ]; then
 			ofwprompt.expect && break
 		fi
 		power.sh cycle
-		login.expect && continue
+		if login.expect; then
+			printf "admin\nadmin\n\005c." | console -f $machine;
+		fi
 		printf "\n\005c." | console -f $machine
 		ofwprompt.expect && break
 		false
