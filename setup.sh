@@ -216,7 +216,7 @@ if [ "$arch" = "sparc64" ]; then
 		#ofwprompt.expect && break
 		printf "\n#.\005c." | console -f $machine
 		if lomprompt.expect; then
-			printf "\nreset -cxy\n" | console -f $machine
+			printf "\nreset -cxy\n\005c." | console -f $machine
 			sleep 900 # v440 checks after reset take about 10 min
 			printf "\n\005c." | console -f $machine
 			ofwprompt.expect && break
