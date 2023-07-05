@@ -25,12 +25,12 @@ echo "ot$no"		> /home/ot$no/env/machine
 echo "toor"		> /home/ot$no/env/rootpw
 echo "roottoor"		> /home/ot$no/env/userpw
 echo "10.0.1.1"		> /home/ot$no/env/tftpserver
-echo "10.0.1.2"		> /home/ot$no/env/sideserver
+echo "10.0.1.2"		> /home/ot$no/env/siteserver
 echo "10.0.1.3"		> /home/ot$no/env/setserver
 
-cp $bak/env/arch	$env
-cp $bak/env/hwaddr	$env
-cp $bak/env/interface	$env
+[ -e $bak/env/arch ] && cp $bak/env/arch	$env
+[ -e $bak/env/hwaddr ] && cp $bak/env/hwaddr	$env
+[ -e $bak/env/interface ] && cp $bak/env/interface	$env
 
 [ -e $bak/env/install ] && cp $bak/env/install $env
 
