@@ -193,8 +193,8 @@ fi
 rm -f etc/boot.conf.tmp
 if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	# set serial configuration for boot loader
-	echo stty com0 115200 >>etc/boot.conf.tmp
-	echo set tty com0 >>etc/boot.conf.tmp
+	echo stty ${com:-com0} 115200 >>etc/boot.conf.tmp
+	echo set tty ${com:-com0} >>etc/boot.conf.tmp
 fi
 echo set image $kernel >>etc/boot.conf.tmp
 mv etc/boot.conf.tmp etc/boot.conf
