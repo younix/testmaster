@@ -31,18 +31,11 @@ case "$action" in
 		exec $setenv $action.sh
 	fi
 	;;
-"setup"|"install")
+"install"|"upgrade"|"dhcp")
 	if ! test -f /home/$USER/env/install; then no_command; fi
 	if $setenv checklock.sh; then
 		shift
-		exec $setenv setup.sh install $*
-	fi
-	;;
-"upgrade")
-	if ! test -f /home/$USER/env/install; then no_command; fi
-	if $setenv checklock.sh; then
-		shift
-		exec $setenv setup.sh upgrade $*
+		exec $setenv setup.sh $action $*
 	fi
 	;;
 "env")
@@ -82,13 +75,14 @@ case "$action" in
 	if test -f /home/$USER/env/install; then
 		echo "install   - install current snapshot"
 		echo "upgrade   - upgrade to current snapshot"
+		echo "dhcp      - boot with dhcp from tftp once"
 	fi
 	echo "bsdcons   - console message of previous OpenBSD boot"
 	echo "env       - show environment"
 	echo "lock      - lock access to machine"
 	echo "unlock    - remove lock from machine"
 	echo "info      - collect information on machine"
-	echo "scp       - copy PXE boot files to tftp server, use scp -O"
+	echo "scp       - copy boot files to tftp server, use scp -O"
 	echo "help      - print this message"
 	;;
 *)

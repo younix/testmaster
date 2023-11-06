@@ -6,7 +6,7 @@ obsdmirror=[2001:1438:2012:c000::16]
 
 usage() {
 	cat >/dev/stderr <<EOF
-setup.sh install|upgrade [-b target] [-k kernel] [-r release]
+setup.sh install|upgrade|dhcp [-b target] [-k kernel] [-r release]
     target	the name of the netboot file
     kernel	the name of the kernel file
     release	no snapshot, but release, like 6.3
@@ -17,9 +17,13 @@ EOF
 
 setup=$1
 shift
-if [ "$setup" != "upgrade" ] && [ "$setup" != "install" ]; then
+case "$setup" in
+install|upgrade|dhcp)
+	;;
+*)
 	usage
-fi
+	;;
+esac
 
 release=snapshots
 args=`getopt b:k:r: $*`
@@ -144,6 +148,7 @@ on_exit() {
 
 trap on_exit EXIT
 
+tftp_home="/var/spool/tftp"
 tftp_dir="/var/spool/tftp/${machine}"
 if [ "${netboot:-invalid}" != "invalid" ]; then
 	netboot="${netboot}"
@@ -170,11 +175,9 @@ else
 	unset netboot;
 fi
 
-mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
-
+cd ${tftp_home}
+rm -f ${ipaddr} && ln -s ${machine} ${ipaddr}
 mkdir -p -m 775 ${tftp_dir}
-mkdir -p -m 775 ${tftp_dir}/etc
-
 cd ${tftp_dir}
 
 if [ -z "${target:-}" ]; then
@@ -185,10 +188,20 @@ if [ -z "${target:-}" ]; then
 fi
 ln -sf $target auto_$setup
 
+if [ "$setup" == "dhcp" ]; then
+	set_dhcpd_conf on
+	power.sh cycle
+	dhcpboot.expect
+	set_dhcpd_conf off
+	exit 0
+fi
+
 if [ -z "${kernel:-}" ]; then
 	ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/bsd.rd"
 	kernel="bsd.rd"
 fi
+
+mkdir -p -m 775 ${tftp_dir}/etc
 
 rm -f etc/boot.conf.tmp
 if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
@@ -203,6 +216,8 @@ rm -f etc/random.seed.tmp
 dd if=/dev/random of=etc/random.seed.tmp bs=512 count=1 status=none
 chmod 644 etc/random.seed.tmp
 mv etc/random.seed.tmp etc/random.seed
+
+mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
 set_dhcpd_conf on
 
