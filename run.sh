@@ -70,20 +70,26 @@ case "$action" in
 	exec $setenv info.sh
 	;;
 "help")
-	echo "        - console"
+	echo "          - console"
+	echo "powerup   - power up machine if not already running"
+	echo "powerdown - shutdown machine gracefully, turn power off"
+	echo "reboot    - reboot machine gracefully"
 	if test -f /home/$USER/env/powerdevice; then
-		echo "on      - power on"
-		echo "off     - power off"
-		echo "cycle   - power cycle"
+		echo "on        - power on"
+		echo "off       - power off"
+		echo "cycle     - power cycle"
 	fi
 	if test -f /home/$USER/env/install; then
-		echo "install - install current snapshot"
-		echo "upgrade - upgrade to current snapshot"
+		echo "install   - install current snapshot"
+		echo "upgrade   - upgrade to current snapshot"
 	fi
-	echo "lock    - lock access to machine"
-	echo "unlock  - remove lock from machine"
-	echo "info    - collect information on machine"
-	echo "help    - print this message"
+	echo "bsdcons   - console message of previous OpenBSD boot"
+	echo "env       - show environment"
+	echo "lock      - lock access to machine"
+	echo "unlock    - remove lock from machine"
+	echo "info      - collect information on machine"
+	echo "scp       - copy PXE boot files to tftp server, use scp -O"
+	echo "help      - print this message"
 	;;
 *)
 	echo "unknown command";;
