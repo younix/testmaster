@@ -18,7 +18,7 @@ EOF
 setup=$1
 shift
 case "$setup" in
-install|upgrade|dhcp)
+install|upgrade|dhcp|linux)
 	;;
 *)
 	usage
@@ -119,7 +119,7 @@ set_dhcpd_conf() {
 hardware ethernet $hwaddr; \
 fixed-address $ipaddr; \
 next-server $tftpserver; \
-filename \"auto_$setup\"; \
+filename \"${2:-invalid}\"; \
 option option-209 \"tftp://$tftpserver/config\"; \
 } #$machine"
 		;;
@@ -189,9 +189,18 @@ fi
 ln -sf $target auto_$setup
 
 if [ "$setup" == "dhcp" ]; then
-	set_dhcpd_conf on
+	set_dhcpd_conf on auto_$setup
 	power.sh cycle
 	dhcpboot.expect
+	set_dhcpd_conf off
+	exit 0
+fi
+
+if [ "$setup" == "linux" ]; then
+	cp -r $tftp_home/linux/* $tftp_dir
+	set_dhcpd_conf on pxelinux.0
+	power.sh cycle
+	linuxboot.expect
 	set_dhcpd_conf off
 	exit 0
 fi
@@ -219,7 +228,7 @@ mv etc/random.seed.tmp etc/random.seed
 
 mk_setup_conf /var/www/htdocs/${hwaddr}-${setup}.conf
 
-set_dhcpd_conf on
+set_dhcpd_conf on auto_$setup
 
 if [ "$arch" = "sparc64" ]; then
 	for i in 1 2; do
@@ -248,7 +257,12 @@ if [ "$arch" = "sparc64" ]; then
 		ofwprompt.expect && break
 		false
 	done
-	printf "boot net:rarp $kernel\n\005c." | console -f $machine
+	# serial console eats characters at this point, firmware bug?
+	{
+	    echo -n "boot net:"; sleep 1;
+	    echo -n "rarp $kernel"; sleep 1;
+	    printf "\n\005c."; sleep 1;
+	} | console -f $machine
 else
 	timeout 60 ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
 	    power.sh cycle
