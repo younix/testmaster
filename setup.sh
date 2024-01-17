@@ -2,7 +2,9 @@
 
 set -eux
 
-obsdmirror=[2001:1438:2012:c000::16]
+obsdmirror=[2a12:6900:1000:1000::6]
+#obsdmirror=obsdmirror.genua.de
+#obsdmirror=ftp.hostserver.de
 
 usage() {
 	cat >/dev/stderr <<EOF
