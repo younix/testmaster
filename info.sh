@@ -11,7 +11,7 @@ pcidump=$(mktemp)
 ssh root@$machine "sed -n '/^OpenBSD/{x;d;};H;\${x;p;}' /var/run/dmesg.boot" \
 	> $dmesg
 ssh root@$machine sysctl > $sysctl
-ssh root@$machine ifconfig > $ifconfig
+ssh root@$machine ifconfig -a inet hwfeatures > $ifconfig
 ssh root@$machine 'usbdevs -vv' > $usbdevs
 ssh root@$machine 'pcidump -v' > $pcidump
 
