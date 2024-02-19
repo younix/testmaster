@@ -181,10 +181,14 @@ cd ${tftp_home}
 rm -f ${ipaddr} && ln -s ${machine} ${ipaddr}
 mkdir -p -m 775 ${tftp_dir}
 cd ${tftp_dir}
+ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/SHA256.sig"
+basekey="$(sed -n 's/.*verify with \(openbsd-[0-9]*-base.pub\).*/\1/p' \
+    SHA256.sig)"
 
 if [ -z "${target:-}" ]; then
 	if [ -n "${netboot:-}" ]; then
 		ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/$netboot"
+		signify -C -p /etc/signify/$basekey -x SHA256.sig "$netboot"
 	fi
 	target="${netboot:-invalid}"
 fi
@@ -209,6 +213,7 @@ fi
 
 if [ -z "${kernel:-}" ]; then
 	ftp "http://$obsdmirror/pub/OpenBSD/$release/$arch/bsd.rd"
+	signify -C -p /etc/signify/$basekey -x SHA256.sig bsd.rd
 	kernel="bsd.rd"
 fi
 
