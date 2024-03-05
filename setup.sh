@@ -88,7 +88,7 @@ mk_setup_conf() {
 		Allow root ssh login = yes
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
-		Server = ${setserver}
+		Server = ${setserver:-10.0.1.3}
 		Server directory = pub/OpenBSD/${release}/${arch}
 		Use http instead = yes
 		Set name(s) = done
@@ -120,16 +120,16 @@ set_dhcpd_conf() {
 		action="host $machine { \
 hardware ethernet $hwaddr; \
 fixed-address $ipaddr; \
-next-server $tftpserver; \
+next-server ${tftpserver:-10.0.1.1}; \
 filename \"${2:-invalid}\"; \
-option option-209 \"tftp://$tftpserver/config\"; \
+option option-209 \"tftp://${tftpserver:-10.0.1.1}/config\"; \
 } #$machine"
 		;;
 	*)
 		action="host $machine { \
 hardware ethernet $hwaddr; \
 fixed-address $ipaddr; \
-next-server $tftpserver; \
+next-server ${tftpserver:-10.0.1.1}; \
 filename \"invalid\"; \
 } #$machine"
 		;;
