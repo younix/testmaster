@@ -21,9 +21,13 @@ case "$action" in
 	/home/test/bin/${powerdevice}.sh ${powerport} 0
 	;;
 "cycle")
-	/home/test/bin/${powerdevice}.sh ${powerport} 0
-	sleep 15
-	/home/test/bin/${powerdevice}.sh ${powerport} 1
+	if [ ${powerdevice} = "kvm" ]; then
+		/home/test/bin/${powerdevice}.sh ${powerport} 2
+	else
+		/home/test/bin/${powerdevice}.sh ${powerport} 0
+		sleep 15
+		/home/test/bin/${powerdevice}.sh ${powerport} 1
+	fi
 	;;
 *)
 	usage
