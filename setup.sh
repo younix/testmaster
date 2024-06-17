@@ -271,8 +271,14 @@ if [ "$arch" = "sparc64" ]; then
 	    printf "\n\005c."; sleep 1;
 	} | console -f $machine
 else
-	timeout 60 ssh root@${ipaddr} shutdown -r now reboot by testmaster ||
-	    power.sh cycle
+	if ! timeout 60 ssh root@${ipaddr} \
+	    shutdown -r now reboot by testmaster; then
+		power.sh cycle
+
+		# bmc may shutdown console after power off
+		sleep 60
+		printf "\n\005co\005c." | console -f $machine
+	fi
 fi
 
 finish.expect
