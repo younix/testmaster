@@ -11,22 +11,22 @@ if [ $# -ne 1 ]; then
 	usage
 fi
 
-action=$1
+action="$1"
 
 case "$action" in
-"on")
-	/home/test/bin/${powerdevice}.sh ${powerport} 1
+on)
+	/home/test/bin/${powerdevice}.sh 1
 	;;
-"off")
-	/home/test/bin/${powerdevice}.sh ${powerport} 0
+off)
+	/home/test/bin/${powerdevice}.sh 0
 	;;
-"cycle")
-	if [ ${powerdevice} = "kvm" ]; then
-		/home/test/bin/${powerdevice}.sh ${powerport} 2
+cycle)
+	if [ "$powerdevice" = kvm ]; then
+		/home/test/bin/${powerdevice}.sh 2
 	else
-		/home/test/bin/${powerdevice}.sh ${powerport} 0
+		/home/test/bin/${powerdevice}.sh 0
 		sleep 15
-		/home/test/bin/${powerdevice}.sh ${powerport} 1
+		/home/test/bin/${powerdevice}.sh 1
 	fi
 	;;
 *)

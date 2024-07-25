@@ -2,26 +2,25 @@
 
 set -eu
 
-port=$1
-status=$2
+action="$1"
 
-if [ ${status} -lt 0 -o ${status} -gt 2 ]; then
-	echo "unkown status: ${status}"
+export LIBVIRT_DEFAULT_URI="qemu+ssh://${machine}@${vmhost}/system"
+
+case "$action" in
+0)
+	command="destroy"
+	;;
+1)
+	command="start"
+	;;
+2)
+	command="reset"
+	;;
+*)
+	echo "kvm unkown action: $action"
 	exit 1
-fi
-
-case "${status}" in
-	"0")
-	echo "power off, machine ${machine:--}"
-	virsh destroy ${machine}
-	;;
-
-	"1")
-	echo "power on, machine ${machine:--}"
-	virsh start ${machine}
-	;;
-
-	"2")
-	virsh reset ${machine}
 	;;
 esac
+
+echo "kvm $command, machine $machine on vmhost $vmhost"
+virsh "$command" "$machine"

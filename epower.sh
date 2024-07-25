@@ -2,27 +2,27 @@
 
 set -eu
 
-usage() {
-	echo "epower [port] [1/0]" > /dev/stderr
+action="$1"
+
+set -- $powerport
+
+port="$1"
+
+if [ "$port" -lt 1 -o "$port" -gt 4 ]; then
+	echo "unkown epower port number: $port"
 	exit 1
-}
-
-if [ $# -ne 2 ]; then
-	usage
-fi
-
-port=$1
-action=$2
+    fi
 
 case "$action" in
-"0")
-	echo "power off, machine $machine, dev epower port $port"
+0)
+	echo "epower off, machine $machine, port $port"
 	;;
-"1")
-	echo "power on, machine $machine, dev epower port $port"
+1)
+	echo "epower on, machine $machine, port $port"
 	;;
 *)
-	usage
+	echo "epower unknown action: $action"
+	exit 1
 	;;
 esac
 
