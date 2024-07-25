@@ -2,22 +2,20 @@
 
 set -eu
 
-port=$1
-status=$2
+action="$1"
 
-if [ ${status} -lt 0 -o ${status} -gt 1 ]; then
-	echo "unkown status: ${status}"
-	exit 1
-fi
-
-case "${status}" in
-	"0")
-	echo "power off, machine ${machine:--}"
-	ssh t4 off
+case "$action" in
+0)
+	command="off"
 	;;
-
-	"1")
-	echo "power on, machine ${machine:--}"
-	ssh t4 on
+1)
+	command="on"
+	;;
+*)
+	echo "unkown action: $action"
+	exit 1
 	;;
 esac
+
+echo "sparc $command, machine $machine on $vmhost"
+ssh "$machine@$vmhost" "$command"
