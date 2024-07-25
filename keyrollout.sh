@@ -2,7 +2,7 @@
 
 set -eu
 
-for m in /home/ot*/users /home/virt/users; do
+for m in /home/ot*/users /home/ft*/users /home/virt/users; do
 	authfile="$(dirname "$m")/.ssh/authorized_keys"
 	echo -n "renew $authfile"
 	rm -f "$authfile"
