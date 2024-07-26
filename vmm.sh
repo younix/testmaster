@@ -18,4 +18,4 @@ case "$action" in
 esac
 
 echo "vmm $command, machine ${machine} on ${vmhost}"
-ssh "${machine}@${vmhost}" "vmctl $command $machine"
+ssh "${machine}@${vmhost}" "vmctl $command $machine" || true

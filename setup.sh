@@ -78,6 +78,7 @@ mk_setup_conf() {
 		Password for root = ${rootpw:-toor}
 		Public ssh key for root = ${sshkey:-}
 		Network interfaces = ${interface}
+		Network interface to configure = ${interface}
 		IPv4 address for ${interface} = ${ipaddr}
 		Default IPv4 route = 10.0.1.1
 		$(if [ -n "${userpw:-}" ]; then
