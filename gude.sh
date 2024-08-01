@@ -21,7 +21,7 @@ fi
 
 eval gude="\${gude${dev}}"
 
-if [ "$port" -lt 1 -o "$port" -gt 8 -a "$port" -ne 4 -o "$port" -gt 12 ]; then
+if [ "$port" -lt 1 -o "$port" -gt 8 -a "$dev" -ne 4 -o "$port" -gt 12 ]; then
 	echo "unkown gude port number: $port"
 	exit 1
 fi
