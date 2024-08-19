@@ -223,7 +223,7 @@ mkdir -p -m 775 ${tftp_dir}/etc
 rm -f etc/boot.conf.tmp
 if [ "$arch" = "i386" -o "$arch" = "amd64" ]; then
 	# set serial configuration for boot loader
-	echo stty ${com:-com0} 115200 >>etc/boot.conf.tmp
+	echo stty ${com:-com0} ${comspeed:-115200} >>etc/boot.conf.tmp
 	echo set tty ${com:-com0} >>etc/boot.conf.tmp
 fi
 echo set image $kernel >>etc/boot.conf.tmp
