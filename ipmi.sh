@@ -25,6 +25,10 @@ case "$action" in
 	echo "ipmi power on, machine $machine"
 	command="--on"
 	;;
+2)
+	echo "ipmi reset, machine $machine"
+	command="--reset"
+	;;
 *)
 	echo "ipmi unkown action: $action"
 	exit 1

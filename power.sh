@@ -29,6 +29,9 @@ cycle)
 		/home/test/bin/${powerdevice}.sh 1
 	fi
 	;;
+reset)
+	/home/test/bin/${powerdevice}.sh 2
+	;;
 *)
 	usage
 	;;

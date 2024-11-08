@@ -20,7 +20,7 @@ case "$action" in
 	if ! test -f /var/consoles/$USER; then no_command; fi
 	exec bsdcons.sh /var/consoles/$USER
 	;;
-"on"|"off"|"cycle")
+"on"|"off"|"cycle"|"reset")
 	if ! test -f /home/$USER/env/powerdevice; then no_command; fi
 	if $setenv checklock.sh; then
 		exec $setenv power.sh $action
@@ -71,6 +71,7 @@ case "$action" in
 		echo "on        - power on"
 		echo "off       - power off"
 		echo "cycle     - power cycle"
+		echo "reset     - power reset"
 	fi
 	if test -f /home/$USER/env/install; then
 		echo "install   - install current snapshot"
