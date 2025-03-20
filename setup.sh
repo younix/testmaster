@@ -96,6 +96,9 @@ mk_setup_conf() {
 		$(if [ -n "${disk:-}" ]; then
 			echo "Which disk is the root disk = ${disk}"
 		fi)
+		$(if [ -n "${partition:-}" ]; then
+			echo "Use (W)hole disk MBR, whole disk (G)PT, (O)penBSD area = ${partition}"
+		fi)
 	EOF
 	if [ "$setup" = "install" ]; then
 		cat >> ${1} <<- EOF
