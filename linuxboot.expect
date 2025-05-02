@@ -1,7 +1,7 @@
 #!/usr/local/bin/expect -f
 
 set timeout 600
-spawn tail -n 0 -f "/var/consoles/$env(machine)"
+spawn tail -n 0 -f "/home/consoles/$env(machine)"
 expect timeout { exit 1 } -re "sysrescue login"
 
 exit 0

@@ -293,5 +293,5 @@ if ! login.expect; then
 	sleep 1
 	printf "\n\005c." | console -f $machine
 	sleep 1
-	tail -n 16 "/var/consoles/$machine" | grep '^login: '
+	tail -n 16 "/home/consoles/$machine" | grep '^login: '
 fi

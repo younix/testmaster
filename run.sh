@@ -17,8 +17,8 @@ case "$action" in
 	exec /usr/local/bin/console "$USER"
 	;;
 "bsdcons")
-	if ! test -f /var/consoles/$USER; then no_command; fi
-	exec bsdcons.sh /var/consoles/$USER
+	if ! test -f /home/consoles/$USER; then no_command; fi
+	exec bsdcons.sh /home/consoles/$USER
 	;;
 "on"|"off"|"cycle"|"reset")
 	if ! test -f /home/$USER/env/powerdevice; then no_command; fi
