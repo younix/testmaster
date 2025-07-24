@@ -3,11 +3,11 @@
 set -eu
 
 # FreeBSD, Linux, OpenBSD Test and virt KVM server
-for m in /home/[flo]t*/users /home/virt/users; do
-	authfile="$(dirname "$m")/.ssh/authorized_keys"
+for m in /home/[flo]t* /home/virt; do
+	authfile="$m/.ssh/authorized_keys"
 	echo -n "renew $authfile"
 	rm -f "$authfile"
-	for user in $(cat "$m"); do
+	for user in $(cat "$m/users" /home/test/users); do
 		if [ ! -s "/home/test/sshkeys/$user" ]; then
 			echo "$user in $m does not have a key" > /dev/stderr
 			continue
