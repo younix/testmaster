@@ -3,7 +3,7 @@
 set -eu
 
 # FreeBSD, Linux, OpenBSD Test and virt KVM server
-for m in /home/[flo]t* /home/virt; do
+for m in /home/[flo]t[0-9]* /home/virt; do
 	authfile="$m/.ssh/authorized_keys"
 	echo -n "renew $authfile"
 	rm -f "$authfile"
