@@ -18,10 +18,12 @@ tempmax=$(cat /var/www/obsdlab/state-temp-max.txt)
 
 if [ $tempcur -lt $tempmin ]; then
 	echo $tempcur > /var/www/obsdlab/state-temp-min.txt
+	tempmin=$tempcur
 fi
 
 if [ $tempcur -gt $tempmax ]; then
 	echo $tempcur > /var/www/obsdlab/state-temp-max.txt
+	tempmax=$tempcur
 fi
 
 tempmintime=$(stat -t '%F %T' -f '%Sm' /var/www/obsdlab/state-temp-min.txt)
