@@ -39,4 +39,8 @@ case "$action" in
 	;;
 esac
 
-curl -s "http://${gude}/ov.html?cmd=1&p=${port}&s=${action}" > /dev/null
+if [ $dev -eq 4 ]; then
+	curl -s "http://${gude}/SWOV.CGI?s6=${action}" > /dev/null
+else
+	curl -s "http://${gude}/ov.html?cmd=1&p=${port}&s=${action}" > /dev/null
+fi
