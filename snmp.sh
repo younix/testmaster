@@ -16,6 +16,8 @@ tempcur=$(snmp get -O qv -v 2c -c public gude7 enterprises.28507.56.1.6.1.1.2.1)
 tempmin=$(cat /var/www/obsdlab/state-temp-min.txt)
 tempmax=$(cat /var/www/obsdlab/state-temp-max.txt)
 
+echo $tempcur $(date +"%F %T") >> /var/www/obsdlab/state-temp.log
+
 if [ $tempcur -lt $tempmin ]; then
 	echo $tempcur > /var/www/obsdlab/state-temp-min.txt
 	tempmin=$tempcur
