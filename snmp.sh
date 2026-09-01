@@ -35,12 +35,11 @@ tempcur=$(echo $tempcur | sed -Ee 's/(.*)(.)$/\1.\2/')
 tempmin=$(echo $tempmin | sed -Ee 's/(.*)(.)$/\1.\2/')
 tempmax=$(echo $tempmax | sed -Ee 's/(.*)(.)$/\1.\2/')
 
-echo "#tempcur::before { content: \"$tempcur°C\" }"
-echo "#tempmin::before { content: \"$tempmin°C\" }"
-echo "#tempmax::before { content: \"$tempmax°C\" }"
+echo "#tempcur::before { content: \"$tempcur °C\" }"
+echo "#tempmin::before { content: \"$tempmin °C\" }"
+echo "#tempmax::before { content: \"$tempmax °C\" }"
 echo "#tempmintime::before { content: \"$tempmintime\" }"
 echo "#tempmaxtime::before { content: \"$tempmaxtime\" }"
-
 
 #
 # collect power socket states
