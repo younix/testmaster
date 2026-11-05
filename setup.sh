@@ -87,7 +87,7 @@ mk_setup_conf() {
 			echo "Password for user = ${userpw}"
 			echo "Public ssh key for user = ${sshkey:-}"
 		fi)
-		Allow root ssh login = yes
+		Allow root ssh login = ${sshroot:-yes}
 		What timezone are you in = Europe/Berlin
 		Location of sets = http
 		Server = ${setserver:-10.0.1.3}
