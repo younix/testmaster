@@ -80,6 +80,7 @@ mk_setup_conf() {
 		Network interfaces = ${interface:-em0}
 		Network interface to configure = ${interface:-em0}
 		IPv4 address for ${interface:-em0} = ${ipaddr}
+		IPv6 address for ${interface:-em0} = ${ip6addr:-none}
 		Default IPv4 route = 10.0.1.1
 		$(if [ -n "${userpw:-}" ]; then
 			echo "Setup a user = user";
