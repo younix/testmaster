@@ -24,5 +24,9 @@ for m in /home/[flo]t[0-9]* /home/kvm /home/virt; do
 		sed -e "s/^/environment=\"testuser=$user\" /" \
 		    "/home/test/sshkeys/$user" >> "$authfile"
 	done
+	if [ -r "$m/.ssh/id_rsa.pub" -a -d "$m/env" ]; then
+		cp "$m/.ssh/id_rsa.pub" "$m/env/sshkey"
+		chmod 644 "$m/env/sshkey"
+	fi
 	echo
 done
